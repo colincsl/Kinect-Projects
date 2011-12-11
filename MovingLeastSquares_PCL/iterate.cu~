@@ -1,0 +1,57 @@
+
+#include <iostream>
+#include <cuda.h>
+#include <cutil.h>
+#include <cuda_runtime_api.h>
+
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
+#include <thrust/transform.h>
+#include <thrust/sequence.h>
+#include <thrust/copy.h>
+#include <thrust/fill.h>
+#include <thrust/replace.h>
+#include <thrust/functional.h>
+
+#include "iterate.h"
+
+using namespace std;
+
+void thrustPCL()
+{
+	int size=10;
+	int a=10;
+ 		
+ 	thrust::device_vector<int> X(size);	
+	thrust::device_vector<int> Y(size);
+	thrust::device_vector<int> Z(size);
+	thrust::device_vector<int> out(size);
+	thrust::host_vector<int> out_h(size);
+
+	// Init X
+	thrust::sequence(X.begin(), X.end());
+	// Init Y = -X
+	thrust::transform(X.begin(), X.end(), Y.begin(), thrust::negate<int>());
+	// Init Z = 2
+	thrust::fill(Z.begin(), Z.end(), 2);
+
+	//thrust::replace(Y.begin(), Y.end(), 1, 10);
+	thrust::fill(Y.begin(), Y.end(), 10);
+
+	thrust::transform(X.begin(), X.end(), Y.begin(), out.begin(), tTestKernel(a));
+
+	thrust::copy(out.begin(), out.end(), out_h.begin());
+
+//	cout << "Y:" << endl;
+//	for (int i=0; i<10; i++) cout << Y[i] << endl;
+	cout << "Out:" << endl;
+	for (int i=0; i<size; i++) cout << out_h[i] << endl;
+ 		
+
+};
+
+	__host__ __device__
+	float tTestKernel::operator()(const float& x, const float& y) const
+	{
+		return 0;
+	};

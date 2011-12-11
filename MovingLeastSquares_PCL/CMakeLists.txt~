@@ -1,0 +1,46 @@
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+
+
+project(gpu_tests)
+
+find_package(CUDA REQUIRED)
+find_package(PCL REQUIRED)
+
+set(CUDA_ARCH_BIN 1.1)
+set(CUDA_ARCH_PTX 1.1)
+
+
+include_directories(${PCL_INCLUDE_DIRS})
+include_directories(${CUDA_INCLUDE_DIRS})
+include_directories("~/NVIDIA_GPU_Computing_SDK/C/common/inc")
+
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+
+#message(${PCL_INCLUDE_DIRS})
+#MESSAGE(${PCL_GPU_FEATURES_INCLUDE_DIR}/device)
+
+#add_executable (main main.cpp)
+#add_executable (mls mls.cpp)
+#add_executable (gpu_viewer viewer.cpp)
+#cuda_add_executable(iterate iterate.cu)
+#cuda_add_executable(Squared Square.cu)
+#CUDA_ADD_LIBRARY(iterate iterate.cu)
+#target_link_libraries(iterate ${PCL_CUDA_COMMON_LIBRARIES} ${PCL_LIBRARIES})
+#cuda_compile(fcns iterate.cu)
+
+cuda_add_executable (gpu_iterate gpu_iterate.cpp iterate.cu)
+#cuda_add_executable (gpu_iterate gpu_iterate.cu)
+#PCL_CUDA_ADD_EXECUTABLE(gpu_viewer viewer.cpp)
+
+#target_link_libraries (main ${PCL_VISUALIZATION_LIBRARIES} ${PCL_RANGE_IMAGE_LIBRARIES})
+#target_link_libraries (mls ${PCL_LIBRARIES})
+
+#target_link_libraries (gpu_viewer ${PCL_CUDA_COMMON_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries (gpu_iterate  ${PCL_LIBRARIES} ${PCL_CUDA_COMMON_LIBRARIES} )
+#target_link_libraries (gpu_iterate  ${PCL_LIBRARIES} ${PCL_CUDA_COMMON_LIBRARIES} ${iterate})
+
+#target_link_libraries(iterate ${PCL_CUDA_COMMON_LIBRARIES} ${PCL_LIBRARIES})
+
+

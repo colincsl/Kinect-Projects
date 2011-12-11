@@ -1,0 +1,48 @@
+
+#ifndef ITERATE_H
+#define ITERATE_H
+
+//#include <iostream>
+//#include <cuda.h>
+//#include <cutil.h>
+//#include <cuda_runtime_api.h>
+
+
+//using namespace std;
+
+#include <pcl/cuda/io/host_device.h>
+
+using namespace pcl::cuda;
+using pcl::cuda::PointCloudAOS;
+using pcl::cuda::Device;
+using pcl::cuda::PointXYZRGB;
+
+void thrustPCL();
+void thrustPCL_AOS(PointCloudAOS<Device>::Ptr x, PointCloudAOS<Device>::Ptr y);
+
+struct tTestKernel
+{
+	const float a;
+
+	tTestKernel(float _a):a(_a){};
+
+	__host__ __device__
+	float operator()(const float& x, const float& y) const;
+
+};
+
+struct PCLKernel
+{
+
+	PCLKernel(){};
+
+//float operator()(PointCloudAOS<Device>::Ptr x) const;
+	template <typename Tuple>
+	__host__ __device__
+	const Tuple& operator()(const Tuple &x) const;	
+	
+
+};
+
+
+#endif
