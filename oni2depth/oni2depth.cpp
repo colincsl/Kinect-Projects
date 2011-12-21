@@ -41,6 +41,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl/impl/point_types.hpp>
 #include <pcl/common/time.h> //fps calculations
 #include <pcl/io/oni_grabber.h>
 #include <pcl/visualization/cloud_viewer.h>
@@ -52,6 +53,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/opencv.hpp"
+using namespace cv;
+using namespace pcl;
 
 #define SHOW_FPS 1
 #if SHOW_FPS
@@ -83,13 +89,32 @@ public:
     typedef pcl::PointCloud<PointType> Cloud;
     typedef typename Cloud::ConstPtr CloudConstPtr;    
     bool lock;
-    float minRange_;
-    float maxRange_;
+    float minRange_, maxRange_;
+    float angRez;
+    float noiseLevel;
+    float min_camera_range;
+    int border_size;
+    int i_image;
+    pcl::RangeImage::CoordinateFrame coordinateFrame;
+    Eigen::Affine3f sceneSensorPose;
+    
+    pcl::RangeImage rangeImage;
+    pcl::visualization::RangeImageVisualizer rangeImageWidget;  
+    Mat cvImg;
+    
     
     SimpleONIViewer(pcl::ONIGrabber& grabber, float minRange=-1.0f, float maxRange=-1.0f)
-    : viewer("PCL OpenNI Viewer")
-    , grabber_(grabber), lock(false), minRange_(minRange), maxRange_(maxRange)
+    : grabber_(grabber), lock(false), minRange_(minRange), maxRange_(maxRange), cvImg(Size(640, 480), CV_8U)
     {
+//        cvImg(Size(640, 480), CV_16U)
+//        viewer("PCL OpenNI Viewer")
+        angRez = pcl::deg2rad(0.09f);
+        noiseLevel = 0.0f;
+        min_camera_range = 0.0f;
+        border_size = 0;
+        i_image = 0;
+        coordinateFrame = pcl::RangeImage::CAMERA_FRAME;
+        sceneSensorPose = Eigen::Affine3f::Identity();
     }
     
     /**
@@ -99,13 +124,91 @@ public:
     void
     cloud_cb_ (const CloudConstPtr& cloud)
     {
-//        if (!lock){
-//                                std::cout << "Start new cloud" << std::endl;
-            FPS_CALC ("callback");
-            boost::mutex::scoped_lock lock (mtx_);
-            cloud_ = cloud;
-//                                std::cout << "End new cloud" << std::endl;
+
+        FPS_CALC ("callback");
+        boost::mutex::scoped_lock lock (mtx_);
+        cloud_ = cloud;
+        
+        rangeImage.createFromPointCloud(*cloud, angRez, pcl::deg2rad(360.0f), pcl::deg2rad(180.0f), sceneSensorPose, coordinateFrame, noiseLevel, min_camera_range, border_size);
+        
+        
+        if (minRange_ < 0.0f)
+        {
+            rangeImage.getMinMaxRanges(minRange_, maxRange_);                       
+            std::cout << "Min: " << minRange_ << " Max: " << maxRange_ << std::endl;
+        }    
+
+        rangeImage.setUnseenToMaxRange();
+     //   minRange_ = 1.5;
+       // maxRange_ = 2.8;
+
+        
+//        float rangeFloats[640*480];
+//        float *rangeFloats;
+//        rangeFloats = rangeImage.getRangesArray();
+        
+        std::string img_base("output/depth_");        
+        std::string img_filename;        
+        std::string ind_string;
+        char i_image_char[10];
+        
+        sprintf(i_image_char, "%04d", i_image);
+        img_filename = img_base + i_image_char + ".jpg";                                  
+        
+        std::cout << img_filename << std::endl;
+
+        
+//        MatIterator_<uchar> it = cvImg.begin();
+////        it = cvImg.begin<uchar>();
+//        MatIterator_<uchar> it_end = cvImg.end<uchar>();
+//        for(; it != it_end; ++it)
+//        {
+//            cout << it << endl;
+////            double v = *it * 1.7 + rand()
+//            double v = rangeFloats[*it];
+//            *it = saturate_cast<uchar>(v/maxRange_);
 //        }
+
+
+        try {
+
+            float tmp_z;
+            PointWithRange tmp_pt;
+            char rgb_val;
+            short short_val;
+            float maxDist = minRange_+maxRange_;
+            unsigned int iter = 0;
+            for (int y=0; y<480; y++)        
+            {
+                for (int x=0; x<640; x++)
+                {
+                    tmp_pt = rangeImage.getPoint(x, y);
+                    tmp_z = tmp_pt.range;
+                    
+                    
+                    if (tmp_z > maxRange_) tmp_z = maxRange_;                    
+//                    cout << tmp_z << endl;
+                    
+                    
+                    rgb_val = saturate_cast<char>((tmp_z-minRange_)/(maxRange_-minRange_)*255.);
+//                    short_val = saturate_cast<unsigned short>((tmp_z-minRange_)/(maxRange_-minRange_)*65535);                    
+                    cvImg.at<char>(y, x) = rgb_val;
+//                    cvImg.at<unsigned short>(y, x) = short_val; 
+//                    cout << cvImg.at<char>(y, x) << endl;
+//                    cout << cvImg.at<unsigned short>(y, x) << endl;                    
+//                    cout << endl;
+                    iter++;
+                }
+            }
+            
+            imwrite(img_filename, cvImg);
+            
+            i_image++; // increment image number
+
+            
+        } catch (char ee) {}
+            
+//        delete rangeFloats;
         
     }
     
@@ -113,17 +216,17 @@ public:
      * @brief swaps the pointer to the point cloud with Null pointer and returns the cloud pointer
      * @return boost shared pointer to point cloud
      */
-    CloudConstPtr
-    getLatestCloud ()
-    {
-        //lock while we swap our cloud and reset it.
-        boost::mutex::scoped_lock lock(mtx_);
-        CloudConstPtr temp_cloud;
-        temp_cloud.swap (cloud_); //here we set cloud_ to null, so that
-        //it is safe to set it again from our
-        //callback
-        return (temp_cloud);
-    }
+//    CloudConstPtr
+//    getLatestCloud ()
+//    {
+//        //lock while we swap our cloud and reset it.
+//        boost::mutex::scoped_lock lock(mtx_);
+//        CloudConstPtr temp_cloud;
+//        temp_cloud.swap (cloud_); //here we set cloud_ to null, so that
+//        //it is safe to set it again from our
+//        //callback
+//        return (temp_cloud);
+//    }
     
     /**
      * @brief starts the main loop
@@ -131,92 +234,19 @@ public:
     void
     run()
     {
-        //pcl::Grabber* interface = new pcl::OpenNIGrabber(device_id_, pcl::OpenNIGrabber::OpenNI_QQVGA_30Hz, pcl::OpenNIGrabber::OpenNI_VGA_30Hz);
-        
-        boost::function<void (const CloudConstPtr&) > f = boost::bind (&SimpleONIViewer::cloud_cb_, this, _1);
-        
+        boost::function<void (const CloudConstPtr&) > f = boost::bind (&SimpleONIViewer::cloud_cb_, this, _1);        
         boost::signals2::connection c = grabber_.registerCallback (f);
         
         grabber_.start();
         
-        pcl::RangeImage rangeImage;
-        pcl::visualization::RangeImageVisualizer rangeImageWidget;  
-        
-        float angRez = pcl::deg2rad(0.09f);
-        float noiseLevel = 0.0f;
-        float min_range = 0.0f;
-        int border_size = 0;
-        pcl::RangeImage::CoordinateFrame coordinateFrame = pcl::RangeImage::CAMERA_FRAME;
-        Eigen::Affine3f sceneSensorPose ( Eigen::Affine3f::Identity());
-        
-//        float minVal = 0.0f;
-//        float maxVal = 0.0f;
-        
-        
-        int i_image(0);
-        std::string ppm_base("output/depth_");        
-        std::string ppm_filename;
-        
-//        std::stringstream ss;
-        std::string ind_string;
-        char i_image_char[10];
-        
-        while (!viewer.wasStopped ())
-        {
-            if (cloud_)
-            {
-                lock = true;
-                FPS_CALC ("drawing");
-                //the call to get() sets the cloud_ to null;
-//                viewer.showCloud (getLatestCloud ());
-                
-                if (!cloud_->empty()){
-                    try {
-                        CloudConstPtr temp_cloud2;
-                        temp_cloud2.swap (cloud_);
-
-                        rangeImage.createFromPointCloud(*temp_cloud2, angRez, pcl::deg2rad(360.0f), pcl::deg2rad(180.0f), sceneSensorPose, coordinateFrame, noiseLevel, min_range, border_size);
-                        
-//                        rangeImageWidget.spin();
-//                        std::cout << "Data: " <<  rangeImage.getRangesArray() << std::endl;   
-                        
-                        if (minRange_ < 0.0f)
-                        {
-                            rangeImage.getMinMaxRanges(minRange_, maxRange_);
-                            rangeImage.setUnseenToMaxRange();                        
-                            std::cout << "Min: " << minRange_ << " Max: " << maxRange_ << std::endl;
-                        }
-                        
-//                        minRange_ = 3.25f;
-//                        maxRange_ = 5.0f;
-
-                        rangeImageWidget.visualize_selected_point = true;
-                        rangeImageWidget.setRangeImage(rangeImage,  minRange_,  maxRange_, true);
-//                        rangeImageWidget.setRangeImage(rangeImage,  minVal,  maxVal, true);                        
-//                        rangeImageWidget.setRangeImage(rangeImage,  -std::numeric_limits<float>::infinity(),  std::numeric_limits<float>::infinity(), true);                        
-                        
-
-                        sprintf(i_image_char, "%04d", i_image);
-                        ppm_filename = ppm_base + i_image_char + ".ppm";                                  
-                        
-                        std::cout << ppm_filename << std::endl;
-                        rangeImageWidget.savePPM(ppm_filename,"");
-//                        ss.str(std::string());
-                        
-                        i_image++; // increment image number
-                    }catch (int e) {
-                        std::cout << "Error" << std::endl;
-                    }
-                }
-                lock = false;
-                
-            }
+        while (1) {
+            boost::this_thread::sleep(boost::posix_time::seconds(1));
         }
         
         grabber_.stop();
     }
     
-    pcl::visualization::CloudViewer viewer;
+//    pcl::visualization::CloudViewer viewer;
     pcl::ONIGrabber& grabber_;
     boost::mutex mtx_;
     CloudConstPtr cloud_;
@@ -225,7 +255,7 @@ public:
 void
 usage(char ** argv)
 {
-    cout << "usage: " << argv[0] << " <path-to-oni-file> [framerate]\n";
+    cout << "usage: " << argv[0] << " <path-to-oni-file> [min range] [max range] \n";
     cout << argv[0] << " -h | --help : shows this help" << endl;
     return;
 }
@@ -241,7 +271,7 @@ main(int argc, char ** argv)
     unsigned frame_rate = 0;
     if (argc >= 2)
     {
-        arg = argv[1];
+        arg = argv[1]; // Filename
         
         if (arg == "--help" || arg == "-h")
         {
@@ -249,15 +279,10 @@ main(int argc, char ** argv)
             return 1;
         }
         
-        if (argc >= 3)
+        if (argc >= 4)
         {
-            frame_rate = atoi(argv[2]);
-        }
-        
-        if (argc >= 5)
-        {
-            minRange_in = atoi(argv[3]);
-            maxRange_in = atoi(argv[4]);            
+            minRange_in = atoi(argv[2]);
+            maxRange_in = atoi(argv[3]);            
         }
     }
     else
@@ -274,9 +299,9 @@ main(int argc, char ** argv)
     else
     {
         grabber = new  pcl::ONIGrabber(arg, true, false);
-        trigger.setInterval (1.0 / (double) frame_rate);
-        trigger.registerCallback (boost::bind(&pcl::ONIGrabber::start, grabber));
-        trigger.start();
+//        trigger.setInterval (1.0 / (double) frame_rate);
+//        trigger.registerCallback (boost::bind(&pcl::ONIGrabber::start, grabber));
+//        trigger.start();
     }
     if (grabber->providesCallback<pcl::ONIGrabber::sig_cb_openni_point_cloud_rgb > ())
     {
