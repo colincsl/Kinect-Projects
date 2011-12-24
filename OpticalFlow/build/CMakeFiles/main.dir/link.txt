@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/main.dir/main.cpp.o  -o main  -L/usr/local/lib -lopencv_contrib -lopencv_legacy -lopencv_stitching -lopencv_gpu -lopencv_objdetect -lopencv_calib3d -lopencv_features2d -lopencv_video -lopencv_highgui -lopencv_ml -lopencv_imgproc -lopencv_flann -lopencv_core 
