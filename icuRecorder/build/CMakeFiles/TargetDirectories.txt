@@ -1,1 +1,0 @@
-/Users/colin/code/Kinect-Projects/icuRecorder/build/CMakeFiles/icuRecorder.dir
