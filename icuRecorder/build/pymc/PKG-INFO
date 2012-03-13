@@ -1,0 +1,31 @@
+Metadata-Version: 1.1
+Name: pymc
+Version: 2.1beta
+Summary: Markov Chain Monte Carlo sampling toolkit.
+Home-page: pymc.googlecode.com
+Author: Christopher Fonnesbeck, Anand Patil and David Huard
+Author-email: fonnesbeck@gmail.com 
+License: Academic Free License
+Description: 
+        Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC),
+        is an increasingly relevant approach to statistical estimation. However,
+        few statistical software packages implement MCMC samplers, and they are
+        non-trivial to code by hand. ``pymc`` is a python package that implements the
+        Metropolis-Hastings algorithm as a python class, and is extremely
+        flexible and applicable to a large suite of problems. ``pymc`` includes
+        methods for summarizing output, plotting, goodness-of-fit and convergence
+        diagnostics.
+        
+        ``pymc`` only requires ``NumPy``. All other dependencies such as ``matplotlib``,
+        ``SciPy``, ``pytables``, ``sqlite`` or ``mysql`` are optional.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Academic Free License (AFL)
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Fortran
+Classifier: Topic :: Scientific/Engineering
+Requires: NumPy (>=1.3)

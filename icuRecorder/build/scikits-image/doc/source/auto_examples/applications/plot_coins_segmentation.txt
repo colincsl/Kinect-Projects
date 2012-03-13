@@ -1,0 +1,72 @@
+
+
+.. _example_applications_plot_coins_segmentation.py:
+
+
+===============================================================
+Comparing edge-based segmentation and region-based segmentation
+===============================================================
+
+In this example, we will see how to segment objects from a background.
+We use the ``coins`` image from ``skimage.data``. This image shows
+several coins outlined against a darker background. The segmentation of
+the coins cannot be done directly from the histogram of grey values,
+because the background shares enough grey levels with the coins that a
+thresholding segmentation is not sufficient. Simply thresholding the image 
+leads either to missing significant parts of the coins, or to merging parts
+of the background with the coins.
+
+We first try an edge-based segmentation. We use the Canny detector to 
+delineate the contours of the coins. These contours are filled using 
+mathematical morphology (``scipy.ndimage.binary_fill_holes``). Small spurious 
+objects are easily removed by applying a threshold on the size of 
+unconnected objects. However, this method is not very robust, since contours 
+that are not perfectly closed are not filled correctly. This happens for one 
+of the coins.
+
+We therefore try a second method, that is region-based. Here we use the 
+watershed transform. An elevation map is provided by the Sobel gradient
+of the image. Markers of the background and the coins are determined from
+the extreme parts of the histogram of grey values.
+
+This second method works even better, and the coins can be segmented and 
+labeled individually.
+
+
+
+
+.. rst-class:: horizontal
+
+
+    *
+
+      .. image:: images/plot_coins_segmentation_4.png
+            :scale: 50
+
+    *
+
+      .. image:: images/plot_coins_segmentation_5.png
+            :scale: 50
+
+    *
+
+      .. image:: images/plot_coins_segmentation_3.png
+            :scale: 50
+
+    *
+
+      .. image:: images/plot_coins_segmentation_2.png
+            :scale: 50
+
+    *
+
+      .. image:: images/plot_coins_segmentation_1.png
+            :scale: 50
+
+
+**Python source code:** :download:`plot_coins_segmentation.py <plot_coins_segmentation.py>`
+(generated using ``skimage`` |version|)
+
+.. literalinclude:: plot_coins_segmentation.py
+    :lines: 32-
+    

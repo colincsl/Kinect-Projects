@@ -1,0 +1,70 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`transform`
+========================
+.. automodule:: skimage.transform
+
+.. currentmodule:: skimage.transform
+.. autosummary::
+
+   skimage.transform.fast_homography
+   skimage.transform.frt2
+   skimage.transform.homography
+   skimage.transform.hough
+   skimage.transform.ifrt2
+   skimage.transform.integral_image
+   skimage.transform.integrate
+   skimage.transform.iradon
+   skimage.transform.probabilistic_hough
+   skimage.transform.radon
+
+fast_homography
+---------------
+
+.. autofunction:: skimage.transform.fast_homography
+
+frt2
+----
+
+.. autofunction:: skimage.transform.frt2
+
+homography
+----------
+
+.. autofunction:: skimage.transform.homography
+
+hough
+-----
+
+.. autofunction:: skimage.transform.hough
+
+ifrt2
+-----
+
+.. autofunction:: skimage.transform.ifrt2
+
+integral_image
+--------------
+
+.. autofunction:: skimage.transform.integral_image
+
+integrate
+---------
+
+.. autofunction:: skimage.transform.integrate
+
+iradon
+------
+
+.. autofunction:: skimage.transform.iradon
+
+probabilistic_hough
+-------------------
+
+.. autofunction:: skimage.transform.probabilistic_hough
+
+radon
+-----
+
+.. autofunction:: skimage.transform.radon
+

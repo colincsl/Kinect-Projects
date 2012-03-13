@@ -1,0 +1,16 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`measure`
+======================
+.. automodule:: skimage.measure
+
+.. currentmodule:: skimage.measure
+.. autosummary::
+
+   skimage.measure.find_contours
+
+find_contours
+-------------
+
+.. autofunction:: skimage.measure.find_contours
+

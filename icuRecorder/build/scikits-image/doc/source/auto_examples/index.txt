@@ -1,0 +1,169 @@
+
+Examples
+========
+
+.. _examples-index:
+
+
+.. _examples_gallery:
+
+General examples
+-------------------
+
+General-purpose and introductory examples for the scikit.
+
+
+
+
+
+.. toctree::
+   :hidden:
+
+   plot_canny
+   plot_contours
+   plot_convex_hull
+   plot_equalize
+   plot_gabors_from_lena
+   plot_glcm
+   plot_harris
+   plot_hog
+   plot_hough_transform
+   plot_lena_tv_denoise
+   plot_medial_transform
+   plot_otsu
+   plot_radon_transform
+   plot_random_walker_segmentation
+   plot_skeleton
+   plot_view_as_blocks
+   plot_watershed
+
+.. figure:: ./images/thumb/plot_canny.png
+   :figclass: gallery
+   :target: ./plot_canny.html
+
+   :ref:`example_plot_canny.py`
+
+.. figure:: ./images/thumb/plot_contours.png
+   :figclass: gallery
+   :target: ./plot_contours.html
+
+   :ref:`example_plot_contours.py`
+
+.. figure:: ./images/thumb/plot_convex_hull.png
+   :figclass: gallery
+   :target: ./plot_convex_hull.html
+
+   :ref:`example_plot_convex_hull.py`
+
+.. figure:: ./images/thumb/plot_equalize.png
+   :figclass: gallery
+   :target: ./plot_equalize.html
+
+   :ref:`example_plot_equalize.py`
+
+.. figure:: ./images/thumb/plot_gabors_from_lena.png
+   :figclass: gallery
+   :target: ./plot_gabors_from_lena.html
+
+   :ref:`example_plot_gabors_from_lena.py`
+
+.. figure:: ./images/thumb/plot_glcm.png
+   :figclass: gallery
+   :target: ./plot_glcm.html
+
+   :ref:`example_plot_glcm.py`
+
+.. figure:: ./images/thumb/plot_harris.png
+   :figclass: gallery
+   :target: ./plot_harris.html
+
+   :ref:`example_plot_harris.py`
+
+.. figure:: ./images/thumb/plot_hog.png
+   :figclass: gallery
+   :target: ./plot_hog.html
+
+   :ref:`example_plot_hog.py`
+
+.. figure:: ./images/thumb/plot_hough_transform.png
+   :figclass: gallery
+   :target: ./plot_hough_transform.html
+
+   :ref:`example_plot_hough_transform.py`
+
+.. figure:: ./images/thumb/plot_lena_tv_denoise.png
+   :figclass: gallery
+   :target: ./plot_lena_tv_denoise.html
+
+   :ref:`example_plot_lena_tv_denoise.py`
+
+.. figure:: ./images/thumb/plot_medial_transform.png
+   :figclass: gallery
+   :target: ./plot_medial_transform.html
+
+   :ref:`example_plot_medial_transform.py`
+
+.. figure:: ./images/thumb/plot_otsu.png
+   :figclass: gallery
+   :target: ./plot_otsu.html
+
+   :ref:`example_plot_otsu.py`
+
+.. figure:: ./images/thumb/plot_radon_transform.png
+   :figclass: gallery
+   :target: ./plot_radon_transform.html
+
+   :ref:`example_plot_radon_transform.py`
+
+.. figure:: ./images/thumb/plot_random_walker_segmentation.png
+   :figclass: gallery
+   :target: ./plot_random_walker_segmentation.html
+
+   :ref:`example_plot_random_walker_segmentation.py`
+
+.. figure:: ./images/thumb/plot_skeleton.png
+   :figclass: gallery
+   :target: ./plot_skeleton.html
+
+   :ref:`example_plot_skeleton.py`
+
+.. figure:: ./images/thumb/plot_view_as_blocks.png
+   :figclass: gallery
+   :target: ./plot_view_as_blocks.html
+
+   :ref:`example_plot_view_as_blocks.py`
+
+.. figure:: ./images/thumb/plot_watershed.png
+   :figclass: gallery
+   :target: ./plot_watershed.html
+
+   :ref:`example_plot_watershed.py`
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>
+    
+
+Longer examples and demonstrations
+----------------------------------
+
+
+
+
+.. toctree::
+   :hidden:
+
+   plot_coins_segmentation
+
+.. figure:: applications/images/thumb/plot_coins_segmentation.png
+   :figclass: gallery
+   :target: ./applications/plot_coins_segmentation.html
+
+   :ref:`example_applications_plot_coins_segmentation.py`
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>
+    

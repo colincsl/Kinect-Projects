@@ -1,0 +1,70 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`color`
+====================
+.. automodule:: skimage.color
+
+.. currentmodule:: skimage.color
+.. autosummary::
+
+   skimage.color.convert_colorspace
+   skimage.color.gray2rgb
+   skimage.color.hsv2rgb
+   skimage.color.rgb2gray
+   skimage.color.rgb2grey
+   skimage.color.rgb2hsv
+   skimage.color.rgb2rgbcie
+   skimage.color.rgb2xyz
+   skimage.color.rgbcie2rgb
+   skimage.color.xyz2rgb
+
+convert_colorspace
+------------------
+
+.. autofunction:: skimage.color.convert_colorspace
+
+gray2rgb
+--------
+
+.. autofunction:: skimage.color.gray2rgb
+
+hsv2rgb
+-------
+
+.. autofunction:: skimage.color.hsv2rgb
+
+rgb2gray
+--------
+
+.. autofunction:: skimage.color.rgb2gray
+
+rgb2grey
+--------
+
+.. autofunction:: skimage.color.rgb2grey
+
+rgb2hsv
+-------
+
+.. autofunction:: skimage.color.rgb2hsv
+
+rgb2rgbcie
+----------
+
+.. autofunction:: skimage.color.rgb2rgbcie
+
+rgb2xyz
+-------
+
+.. autofunction:: skimage.color.rgb2xyz
+
+rgbcie2rgb
+----------
+
+.. autofunction:: skimage.color.rgbcie2rgb
+
+xyz2rgb
+-------
+
+.. autofunction:: skimage.color.xyz2rgb
+

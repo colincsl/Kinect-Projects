@@ -1,0 +1,105 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`filter`
+=====================
+Inheritance diagram for ``skimage.filter``:
+
+.. inheritance-diagram:: skimage.filter 
+   :parts: 3
+
+.. automodule:: skimage.filter
+
+.. currentmodule:: skimage.filter
+
+:class:`LPIFilter2D`
+--------------------
+
+
+.. autoclass:: LPIFilter2D
+  :members:
+  :undoc-members:
+  :show-inheritance:
+  :inherited-members:
+
+  .. automethod:: __init__
+.. autosummary::
+
+   skimage.filter.canny
+   skimage.filter.hprewitt
+   skimage.filter.hsobel
+   skimage.filter.inverse
+   skimage.filter.median_filter
+   skimage.filter.prewitt
+   skimage.filter.rank_order
+   skimage.filter.sobel
+   skimage.filter.threshold_otsu
+   skimage.filter.tv_denoise
+   skimage.filter.vprewitt
+   skimage.filter.vsobel
+   skimage.filter.wiener
+
+canny
+-----
+
+.. autofunction:: skimage.filter.canny
+
+hprewitt
+--------
+
+.. autofunction:: skimage.filter.hprewitt
+
+hsobel
+------
+
+.. autofunction:: skimage.filter.hsobel
+
+inverse
+-------
+
+.. autofunction:: skimage.filter.inverse
+
+median_filter
+-------------
+
+.. autofunction:: skimage.filter.median_filter
+
+prewitt
+-------
+
+.. autofunction:: skimage.filter.prewitt
+
+rank_order
+----------
+
+.. autofunction:: skimage.filter.rank_order
+
+sobel
+-----
+
+.. autofunction:: skimage.filter.sobel
+
+threshold_otsu
+--------------
+
+.. autofunction:: skimage.filter.threshold_otsu
+
+tv_denoise
+----------
+
+.. autofunction:: skimage.filter.tv_denoise
+
+vprewitt
+--------
+
+.. autofunction:: skimage.filter.vprewitt
+
+vsobel
+------
+
+.. autofunction:: skimage.filter.vsobel
+
+wiener
+------
+
+.. autofunction:: skimage.filter.wiener
+

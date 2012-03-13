@@ -1,0 +1,16 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`segmentation`
+===========================
+.. automodule:: skimage.segmentation
+
+.. currentmodule:: skimage.segmentation
+.. autosummary::
+
+   skimage.segmentation.random_walker
+
+random_walker
+-------------
+
+.. autofunction:: skimage.segmentation.random_walker
+

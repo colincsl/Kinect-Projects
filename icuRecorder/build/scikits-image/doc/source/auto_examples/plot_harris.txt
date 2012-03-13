@@ -1,0 +1,27 @@
+
+
+.. _example_plot_harris.py:
+
+
+===============================================================================
+Harris Corner detector
+===============================================================================
+
+The Harris corner filter [1]_ detects "interest points" [2]_ using edge
+detection in multiple directions.
+
+.. [1] http://en.wikipedia.org/wiki/Corner_detection
+.. [2] http://en.wikipedia.org/wiki/Interest_point_detection
+
+
+
+.. image:: images/plot_harris_1.png
+    :align: center
+
+
+**Python source code:** :download:`plot_harris.py <plot_harris.py>`
+(generated using ``skimage`` |version|)
+
+.. literalinclude:: plot_harris.py
+    :lines: 12-
+    

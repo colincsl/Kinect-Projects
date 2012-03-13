@@ -1,0 +1,106 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`morphology`
+=========================
+.. automodule:: skimage.morphology
+
+.. currentmodule:: skimage.morphology
+.. autosummary::
+
+   skimage.morphology.convex_hull_image
+   skimage.morphology.diamond
+   skimage.morphology.disk
+   skimage.morphology.greyscale_black_top_hat
+   skimage.morphology.greyscale_close
+   skimage.morphology.greyscale_dilate
+   skimage.morphology.greyscale_erode
+   skimage.morphology.greyscale_open
+   skimage.morphology.greyscale_white_top_hat
+   skimage.morphology.is_local_maximum
+   skimage.morphology.label
+   skimage.morphology.medial_axis
+   skimage.morphology.rectangle
+   skimage.morphology.skeletonize
+   skimage.morphology.square
+   skimage.morphology.watershed
+
+convex_hull_image
+-----------------
+
+.. autofunction:: skimage.morphology.convex_hull_image
+
+diamond
+-------
+
+.. autofunction:: skimage.morphology.diamond
+
+disk
+----
+
+.. autofunction:: skimage.morphology.disk
+
+greyscale_black_top_hat
+-----------------------
+
+.. autofunction:: skimage.morphology.greyscale_black_top_hat
+
+greyscale_close
+---------------
+
+.. autofunction:: skimage.morphology.greyscale_close
+
+greyscale_dilate
+----------------
+
+.. autofunction:: skimage.morphology.greyscale_dilate
+
+greyscale_erode
+---------------
+
+.. autofunction:: skimage.morphology.greyscale_erode
+
+greyscale_open
+--------------
+
+.. autofunction:: skimage.morphology.greyscale_open
+
+greyscale_white_top_hat
+-----------------------
+
+.. autofunction:: skimage.morphology.greyscale_white_top_hat
+
+is_local_maximum
+----------------
+
+.. autofunction:: skimage.morphology.is_local_maximum
+
+label
+-----
+
+.. autofunction:: skimage.morphology.label
+
+medial_axis
+-----------
+
+.. autofunction:: skimage.morphology.medial_axis
+
+rectangle
+---------
+
+.. autofunction:: skimage.morphology.rectangle
+
+skeletonize
+-----------
+
+.. autofunction:: skimage.morphology.skeletonize
+
+square
+------
+
+.. autofunction:: skimage.morphology.square
+
+watershed
+---------
+
+.. autofunction:: skimage.morphology.watershed
+

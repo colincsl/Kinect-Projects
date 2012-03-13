@@ -1,0 +1,35 @@
+
+
+.. _example_plot_radon_transform.py:
+
+
+===============
+Radon transform
+===============
+
+The radon transform is a technique widely used in tomography to
+reconstruct an object from different projections. A projection is, for
+example, the scattering data obtained as the output of a tomographic
+scan.
+
+For more information see:
+
+  - http://en.wikipedia.org/wiki/Radon_transform
+  - http://www.clear.rice.edu/elec431/projects96/DSP/bpanalysis.html
+
+This script performs the radon transform, and reconstructs the
+input image based on the resulting sinogram.
+
+
+
+
+.. image:: images/plot_radon_transform_1.png
+    :align: center
+
+
+**Python source code:** :download:`plot_radon_transform.py <plot_radon_transform.py>`
+(generated using ``skimage`` |version|)
+
+.. literalinclude:: plot_radon_transform.py
+    :lines: 20-
+    

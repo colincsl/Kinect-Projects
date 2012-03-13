@@ -1,0 +1,65 @@
+Pre-built installation
+----------------------
+
+.. !! Also update scikits-image-web !!
+
+`Windows binaries
+<http://www.lfd.uci.edu/~gohlke/pythonlibs/#scikits.image>`__
+are kindly provided by Christoph Gohlke.
+
+The latest stable release is also included as part of the `Enthought Python
+Distribution (EPD) <http://enthought.com/products/epd.php>`__ and `Python(x,y)
+<http://code.google.com/p/pythonxy/wiki/Welcome>`__.
+
+On systems that support setuptools, the package can be installed from the
+`Python packaging index <http://pypi.python.org/pypi/scikits-image>`__ using
+
+
+::
+
+  easy_install -U scikits-image
+
+or
+
+::
+
+  pip -U scikits-image
+
+Installation from source
+------------------------
+
+Obtain the source from the git-repository at
+`http://github.com/scikits-image/scikits-image
+<http://github.com/scikits-image/scikits-image>`_.
+
+by running
+
+::
+
+  git clone http://github.com/scikits-image/scikits-image.git
+
+in a terminal (You will need to have git installed on your machine).
+
+If you do not have git installed, you can also download a zipball from
+`https://github.com/scikits-image/scikits-image/zipball/master
+<https://github.com/scikits-image/scikits-image/zipball/master>`_.
+
+The SciKit can be installed globally using
+
+::
+
+  python setup.py install
+
+or locally using
+
+::
+
+  python setup.py install --prefix=${HOME}
+
+If you prefer, you can use it without installing, by simply adding
+this path to your PYTHONPATH variable and compiling extensions
+in-place::
+
+  python setup.py build_ext -i
+
+.. include:: ../../DEPENDS.txt

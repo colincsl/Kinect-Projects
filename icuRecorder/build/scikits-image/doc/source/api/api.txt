@@ -1,0 +1,21 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+API Reference
+=============
+
+.. toctree::
+
+   skimage
+   skimage.color
+   skimage.data
+   skimage.draw
+   skimage.exposure
+   skimage.feature
+   skimage.filter
+   skimage.graph
+   skimage.io
+   skimage.measure
+   skimage.morphology
+   skimage.segmentation
+   skimage.transform
+   skimage.util

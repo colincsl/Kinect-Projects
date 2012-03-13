@@ -1,0 +1,33 @@
+
+
+.. _example_plot_lena_tv_denoise.py:
+
+
+====================================================
+Denoising the picture of Lena using total variation
+====================================================
+
+In this example, we denoise a noisy version of the picture of Lena
+using the total variation denoising filter. The result of this filter
+is an image that has a minimal total variation norm, while being as
+close to the initial image as possible. The total variation is the L1
+norm of the gradient of the image, and minimizing the total variation
+typically produces "posterized" images with flat domains separated by
+sharp edges.
+
+It is possible to change the degree of posterization by controlling
+the tradeoff between denoising and faithfulness to the original image.
+
+
+
+
+.. image:: images/plot_lena_tv_denoise_1.png
+    :align: center
+
+
+**Python source code:** :download:`plot_lena_tv_denoise.py <plot_lena_tv_denoise.py>`
+(generated using ``skimage`` |version|)
+
+.. literalinclude:: plot_lena_tv_denoise.py
+    :lines: 18-
+    

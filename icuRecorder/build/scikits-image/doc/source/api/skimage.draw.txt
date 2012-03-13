@@ -1,0 +1,16 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+Module: :mod:`draw`
+===================
+.. automodule:: skimage.draw
+
+.. currentmodule:: skimage.draw
+.. autosummary::
+
+   skimage.draw.bresenham
+
+bresenham
+---------
+
+.. autofunction:: skimage.draw.bresenham
+

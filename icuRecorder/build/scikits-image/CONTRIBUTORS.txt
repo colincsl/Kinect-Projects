@@ -1,0 +1,100 @@
+- Stefan van der Walt
+  Project coordination
+
+- Nicolas Pinto
+  Colour spaces and filters.
+  Shape views: ``util.shape.view_as_windows`` and ``util.shape.view_as_blocks``
+  Montage helpers: ``util.montage``
+
+- Damian Eads
+  Morphological operators
+
+- Mahipal Raythattha
+  Documentation infrastructure
+
+- S. Chris Colbert
+  OpenCV wrappers, Scivi, Qt and Gtk gui bits, fast Hough transform,
+  and much more.
+
+- Holger Rapp
+  OpenCV functions and better OSX library loader
+
+- Ralf Gommers
+  Image IO, color spaces, plots in documentation, cleaner API docs
+
+- Helge Reikeras
+  Logic around API docs generation
+
+- Tony Yu
+  Reading of paletted images; build, bug and doc fixes.
+  Code to generate skimage logo.
+  Otsu thresholding, histogram equalisation, and more.
+
+- Zachary Pincus
+  Tracing of low cost paths, FreeImage I/O plugin, iso-contours,
+  and more.
+
+- Almar Klein
+  Binary heap class for graph algorithms
+
+- Lee Kamentsky and Thouis Jones of the CellProfiler team, Broad Institute, MIT
+  Constant time per pixel median filter, edge detectors, and more.
+
+- Dan Farmer
+  Incorporating CellProfiler's Canny edge detector, ctypes loader with Windows
+  support.
+
+- Pieter Holtzhausen
+  Incorporating CellProfiler's Sobel edge detector, build and bug fixes.
+
+- Emmanuelle Guillart
+  Total variation noise filtering, integration of CellProfiler's
+  mathematical morphology tools, random walker segmentation,
+  tutorials, and more.
+
+- Maël Primet
+  Total variation noise filtering
+
+- Martin Bergholdt
+  Fix missing math.h functions in Windows 7 + MSVCC.
+
+- Neil Muller
+  Numerous fixes, including those for Python 3 compatibility,
+  QT image reading.
+
+- The IPython team
+  From whom we borrowed the github+web tools / style.
+
+- Kyle Mandli
+  CSV to ReST code for feature comparison table.
+
+- The Scikit Learn team
+  From whom we borrowed the example generation tools.
+
+- Andreas Mueller
+  Example data set loader.
+
+- Brian Holt
+  Histograms of Oriented Gradients
+
+- David-Warde Farley, Sturla Molden
+  Bresenheim line drawing, from snippets on numpy-discussion.
+
+- Christoph Gohlke
+  Windows packaging and Python 3 compatibility.
+
+- Neil Yager
+  Skeletonization and grey level co-occurrence matrices.
+
+- Nelle Varoquaux
+  Renaming of the package to ``skimage``.
+  Harris corner detector
+
+- W. Randolph Franklin
+  Point in polygon test.
+
+- Gaël Varoquaux
+  Harris corner detector
+
+- Nicolas Poilvert
+  Shape views: ``util.shape.view_as_windows`` and ``util.shape.view_as_blocks``
