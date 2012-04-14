@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/colin/code/OpticalFlow/main.cpp
+/Users/colin/code/Kinect-Projects/OpticalFlow/main.cpp
 iostream
 -
 vector
@@ -18,13 +18,13 @@ stdio.h
 time.h
 -
 opencv2/objdetect/objdetect.hpp
-/Users/colin/code/OpticalFlow/opencv2/objdetect/objdetect.hpp
+/Users/colin/code/Kinect-Projects/OpticalFlow/opencv2/objdetect/objdetect.hpp
 opencv2/highgui/highgui.hpp
-/Users/colin/code/OpticalFlow/opencv2/highgui/highgui.hpp
+/Users/colin/code/Kinect-Projects/OpticalFlow/opencv2/highgui/highgui.hpp
 opencv2/imgproc/imgproc.hpp
-/Users/colin/code/OpticalFlow/opencv2/imgproc/imgproc.hpp
+/Users/colin/code/Kinect-Projects/OpticalFlow/opencv2/imgproc/imgproc.hpp
 opencv2/video/tracking.hpp
-/Users/colin/code/OpticalFlow/opencv2/video/tracking.hpp
+/Users/colin/code/Kinect-Projects/OpticalFlow/opencv2/video/tracking.hpp
 
 /usr/local/include/opencv2/core/core.hpp
 opencv2/core/types_c.h

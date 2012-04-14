@@ -1441,6 +1441,8 @@ CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/io/openni_camera/
 CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/io/openni_grabber.h
 CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/io/pcd_io.h
 CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/io/pcl_io_exception.h
+CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/io/ply.h
+CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/io/ply_io.h
 CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/pcl_base.h
 CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/pcl_config.h
 CMakeFiles/main.dir/main.cpp.o: /usr/local/include/pcl-1.3/pcl/pcl_macros.h

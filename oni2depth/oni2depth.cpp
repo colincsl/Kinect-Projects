@@ -1,40 +1,6 @@
-/*
- * Software License Agreement (BSD License)
- *
- *  Copyright (c) 2011, Willow Garage, Inc.
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above
- *     copyright notice, this list of conditions and the following
- *     disclaimer in the documentation and/or other materials provided
- *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *	
- * Author: Nico Blodow (blodow@cs.tum.edu)
- *         Radu Bogdan Rusu (rusu@willowgarage.com)
- *         Suat Gedikli (gedikli@willowgarage.com)
- *         Ethan Rublee (rublee@willowgarage.com)
+/*	
+ * Author: Colin Lea (colincsl@gmail.com)
+ * December 2011
  */
 
 #include <boost/thread/thread.hpp>
@@ -58,6 +24,8 @@
 #include "opencv2/opencv.hpp"
 using namespace cv;
 using namespace pcl;
+
+#define MEGA 1
 
 #define SHOW_FPS 1
 #if SHOW_FPS
@@ -90,31 +58,13 @@ public:
     typedef typename Cloud::ConstPtr CloudConstPtr;    
     bool lock;
     float minRange_, maxRange_;
-    float angRez;
-    float noiseLevel;
-    float min_camera_range;
-    int border_size;
     int i_image;
-    pcl::RangeImage::CoordinateFrame coordinateFrame;
-    Eigen::Affine3f sceneSensorPose;
-    
-    pcl::RangeImage rangeImage;
-    pcl::visualization::RangeImageVisualizer rangeImageWidget;  
     Mat cvImg;
     
     
-    SimpleONIViewer(pcl::ONIGrabber& grabber, float minRange=-1.0f, float maxRange=-1.0f)
-    : grabber_(grabber), lock(false), minRange_(minRange), maxRange_(maxRange), cvImg(Size(640, 480), CV_8U)
+    SimpleONIViewer(pcl::ONIGrabber& grabber, int nearestNeighbor_, float minRange=-1.0f, float maxRange=-1.0f, std::string fileout_=""): grabber_(grabber), nearestNeighbor(nearestNeighbor_), lock(false), minRange_(minRange), maxRange_(maxRange), cvImg(Size(640, 480), CV_8U), fileout(fileout_), i_image(0) 
     {
-//        cvImg(Size(640, 480), CV_16U)
-//        viewer("PCL OpenNI Viewer")
-        angRez = pcl::deg2rad(0.09f);
-        noiseLevel = 0.0f;
-        min_camera_range = 0.0f;
-        border_size = 0;
-        i_image = 0;
-        coordinateFrame = pcl::RangeImage::CAMERA_FRAME;
-        sceneSensorPose = Eigen::Affine3f::Identity();
+//        namedWindow("Win");
     }
     
     /**
@@ -126,107 +76,158 @@ public:
     {
 
         FPS_CALC ("callback");
-        boost::mutex::scoped_lock lock (mtx_);
+        
+        // Lock pointcloud so another thread can't interrupt
+//        mtx_.lock();
+        boost::mutex::scoped_lock lock(mtx_);
+//        cout << "locking" << endl;
+        
         cloud_ = cloud;
+        float tmp_z;
         
-        rangeImage.createFromPointCloud(*cloud, angRez, pcl::deg2rad(360.0f), pcl::deg2rad(180.0f), sceneSensorPose, coordinateFrame, noiseLevel, min_camera_range, border_size);
-        
-        
+        // If not set with input args, get min/max range
         if (minRange_ < 0.0f)
-        {
-            rangeImage.getMinMaxRanges(minRange_, maxRange_);                       
-            std::cout << "Min: " << minRange_ << " Max: " << maxRange_ << std::endl;
+        {            
+            for (int i=0; i<480*640; i++)        
+            {
+                tmp_z = cloud_->points[i].z;
+                if (tmp_z > maxRange_) maxRange_ = tmp_z; 
+                if (tmp_z < minRange_) minRange_ = tmp_z;                                    
+            }            
+            std::cout << "Min: " << minRange_ << " Max: " << maxRange_ << std::endl;            
+            
         }    
 
-        rangeImage.setUnseenToMaxRange();
-     //   minRange_ = 1.5;
-       // maxRange_ = 2.8;
-
+        // Find path to output image
+        std::string img_base("");
         
-//        float rangeFloats[640*480];
-//        float *rangeFloats;
-//        rangeFloats = rangeImage.getRangesArray();
+        if (fileout == "")
+            img_base.insert(0,"output/depth_");
+        else
+            img_base.insert(0,fileout);
         
-        std::string img_base("output/depth_");        
         std::string img_filename;        
         std::string ind_string;
-        char i_image_char[10];
-        
-        sprintf(i_image_char, "%04d", i_image);
+        char i_image_char[20];
+        sprintf(i_image_char, "/depth_%04d", i_image);
         img_filename = img_base + i_image_char + ".jpg";                                  
         
-        std::cout << img_filename << std::endl;
+//        std::cout << img_filename << std::endl;
 
+        // Set depth info from rangeimage to OpenCV image
+        char rgb_val;
+        float maxDist = minRange_+maxRange_;
         
-//        MatIterator_<uchar> it = cvImg.begin();
-////        it = cvImg.begin<uchar>();
-//        MatIterator_<uchar> it_end = cvImg.end<uchar>();
-//        for(; it != it_end; ++it)
-//        {
-//            cout << it << endl;
-////            double v = *it * 1.7 + rand()
-//            double v = rangeFloats[*it];
-//            *it = saturate_cast<uchar>(v/maxRange_);
-//        }
-
-
-        try {
-
-            float tmp_z;
-            PointWithRange tmp_pt;
-            char rgb_val;
-            short short_val;
-            float maxDist = minRange_+maxRange_;
-            unsigned int iter = 0;
-            for (int y=0; y<480; y++)        
+        for (int y=0; y<480; y++)        
+        {
+            for (int x=0; x<640; x++)
             {
-                for (int x=0; x<640; x++)
+                tmp_z = cloud_->points[y*640+x].z;
+                
+                if (tmp_z > maxRange_) tmp_z = maxRange_;
+                
+                rgb_val = saturate_cast<char>(256.0 - (tmp_z-minRange_)/(maxRange_-minRange_)*256.0);
+                cvImg.at<char>(y, x) = rgb_val;
+            }
+        }
+        
+        
+        if (nearestNeighbor)
+        {
+            Mat distX, distY;
+            distX = Mat::zeros(Size(640, 480), CV_16S);
+            distY = Mat::zeros(Size(640, 480), CV_16S);
+            int dx, dy;
+            
+            for (int y=1; y<480; y++)        
+            {
+                for (int x=1; x<640; x++)
                 {
-                    tmp_pt = rangeImage.getPoint(x, y);
-                    tmp_z = tmp_pt.range;
-                    
-                    
-                    if (tmp_z > maxRange_) tmp_z = maxRange_;                    
-//                    cout << tmp_z << endl;
-                    
-                    
-                    rgb_val = saturate_cast<char>((tmp_z-minRange_)/(maxRange_-minRange_)*255.);
-//                    short_val = saturate_cast<unsigned short>((tmp_z-minRange_)/(maxRange_-minRange_)*65535);                    
-                    cvImg.at<char>(y, x) = rgb_val;
-//                    cvImg.at<unsigned short>(y, x) = short_val; 
-//                    cout << cvImg.at<char>(y, x) << endl;
-//                    cout << cvImg.at<unsigned short>(y, x) << endl;                    
-//                    cout << endl;
-                    iter++;
+                    tmp_z = cloud_->points[y*640+x].z;
+//                    tmp_z = cvImg.at<char>(y,x);
+                    if (tmp_z != tmp_z)
+                    {
+                        if (cvImg.at<char>(y,x-1))                        
+                            distX.at<int>(y,x) = -1;
+                        else if (distX.at<int>(y,x-1))
+                            distX.at<int>(y,x) = distX.at<int>(y,x-1)-1;
+                        else /* if left dist is 0 */
+                            distX.at<int>(y,x) = 0;
+                        
+                        if (cvImg.at<char>(y-1,x))
+                            distY.at<int>(y,x) = -1;
+                        else if (distY.at<int>(y-1,x))
+                            distY.at<int>(y,x) = distY.at<int>(y-1,x)-1;
+                        else
+                            distY.at<int>(y,x) = 0;
+                    }
                 }
             }
             
-            imwrite(img_filename, cvImg);
-            
-            i_image++; // increment image number
+            for (int y=480-1; y>=0; y--)        
+            {
+                for (int x=640-1; x>=0; x--)
+                {
+                    tmp_z = cloud_->points[y*640+x].z;
 
+                    if (tmp_z != tmp_z)
+                    {
+                        if (cvImg.at<char>(y,x+1))
+                            distX.at<int>(y,x) = 1;
+                        else
+                        {
+                            if (distX.at<int>(y,x+1))
+                            {   
+                                if (abs(distX.at<int>(y,x)) > distX.at<int>(y,x+1)+1)
+                                    distX.at<int>(y,x) = distX.at<int>(y,x+1)+1;
+                            }
+                        }
+                        
+                        if (cvImg.at<char>(y+1,x))
+                            distY.at<int>(y,x) = 1;
+                        else
+                        {
+                            if (distY.at<int>(y+1,x))
+                            {
+                                if (abs(distY.at<int>(y,x)) > distY.at<int>(y+1,x)+1)
+                                    distY.at<int>(y,x) = distY.at<int>(y+1,x)+1;                            
+                            }
+                        }
+                    
+                        // Apply to the original image
+                        // But first find if vertical or horizontal pixel is closer
+                        if (abs(distX.at<int>(y,x)) < abs(distY.at<int>(y,x)))
+                        {
+                            dx = distX.at<int>(y,x);
+                            dy = 0;
+                        }
+                        else
+                        {
+                            dx = 0;                            
+                            dy = distY.at<int>(y,x);
+                        }
+                        cvImg.at<char>(y,x) = cvImg.at<char>(y+dy,x+dx);                    
+                    
+                    
+                    }
+                }
+            }            
             
-        } catch (char ee) {}
-            
-//        delete rangeFloats;
+       
+        }
         
+        
+        
+        imwrite(img_filename, cvImg);        
+        i_image++; // increment image number
+
+        time = pcl::getTime();        
+        tmpLock = false;
+//        cout << "Threadi: " << boost::this_thread::get_id() << endl;
+//        std::cout << img_filename << std::endl;
+//        mtx_.unlock();
     }
     
-    /**
-     * @brief swaps the pointer to the point cloud with Null pointer and returns the cloud pointer
-     * @return boost shared pointer to point cloud
-     */
-//    CloudConstPtr
-//    getLatestCloud ()
-//    {
-//        //lock while we swap our cloud and reset it.
-//        boost::mutex::scoped_lock lock(mtx_);
-//        CloudConstPtr temp_cloud;
-//        temp_cloud.swap (cloud_); //here we set cloud_ to null, so that
-//        //it is safe to set it again from our
-//        //callback
-//        return (temp_cloud);
-//    }
     
     /**
      * @brief starts the main loop
@@ -237,25 +238,43 @@ public:
         boost::function<void (const CloudConstPtr&) > f = boost::bind (&SimpleONIViewer::cloud_cb_, this, _1);        
         boost::signals2::connection c = grabber_.registerCallback (f);
         
+        tmpLock = false;
         grabber_.start();
-        
-        while (1) {
-            boost::this_thread::sleep(boost::posix_time::seconds(1));
+        time = pcl::getTime();
+        while (pcl::getTime()-time < 3.0) 
+        {    
+//            cout << "Lock: " << tmpLock << " " << boost::this_thread::get_id() << endl;
+            // Trigger the next frame
+            
+            // Add timed mutex. Maybe not all 'frames' have a cloud?
+            
+            if (!tmpLock || pcl::getTime()-time > 0.5)// && mtx_.try_lock())
+            {
+                tmpLock = true;
+                grabber_.start();
+            }
+            boost::this_thread::sleep(boost::posix_time::seconds(.01));
+
         }
         
-        grabber_.stop();
+        cout << "Outputted " << i_image-1 << " frames." << endl;
+        
     }
     
-//    pcl::visualization::CloudViewer viewer;
     pcl::ONIGrabber& grabber_;
     boost::mutex mtx_;
+    boost::mutex mtx_timed;
     CloudConstPtr cloud_;
+    std::string fileout;
+    double time;
+    int nearestNeighbor;
+    bool tmpLock;
 };
 
 void
 usage(char ** argv)
 {
-    cout << "usage: " << argv[0] << " <path-to-oni-file> [min range] [max range] \n";
+    cout << "usage: " << argv[0] << " <path-to-oni-file> [min range] [max range] [path-to-jpg-folder] \n";
     cout << argv[0] << " -h | --help : shows this help" << endl;
     return;
 }
@@ -264,55 +283,40 @@ int
 main(int argc, char ** argv)
 {
     std::string arg("");
+    std::string fileout("");
     
     float minRange_in = -1.0f;
     float maxRange_in = -1.0f;
+    int nearestNeighbor(0);
     
     unsigned frame_rate = 0;
-    if (argc >= 2)
+    if (argc < 2)
     {
-        arg = argv[1]; // Filename
-        
-        if (arg == "--help" || arg == "-h")
-        {
-            usage(argv);
-            return 1;
-        }
-        
-        if (argc >= 4)
-        {
-            minRange_in = atoi(argv[2]);
-            maxRange_in = atoi(argv[3]);            
-        }
-    }
-    else
-    {
-        usage (argv);
+        usage(argv);
         return 1;
     }
     
-    pcl::TimeTrigger trigger;
+    arg = argv[1]; // Filename
     
-    pcl::ONIGrabber* grabber = 0;
-    if (frame_rate == 0)
-        grabber = new  pcl::ONIGrabber(arg, true, true);
-    else
+    if (argc >= 4)
     {
-        grabber = new  pcl::ONIGrabber(arg, true, false);
-//        trigger.setInterval (1.0 / (double) frame_rate);
-//        trigger.registerCallback (boost::bind(&pcl::ONIGrabber::start, grabber));
-//        trigger.start();
+        minRange_in = atof(argv[2]);
+        maxRange_in = atof(argv[3]);           
+        cout << "Min Range: " << minRange_in << "\t Max Range: " << maxRange_in;
+        cout << " Resolution: " << (maxRange_in-minRange_in)/256.0*10 << " cm" << endl;
     }
-    if (grabber->providesCallback<pcl::ONIGrabber::sig_cb_openni_point_cloud_rgb > ())
-    {
-        SimpleONIViewer<pcl::PointXYZRGB> v(*grabber, minRange_in, maxRange_in);
-        v.run();
-    }
-    else
-    {
-        SimpleONIViewer<pcl::PointXYZI> v(*grabber, minRange_in, maxRange_in);
-        v.run();
-    }
+    if (argc >= 5)
+        fileout = argv[4];
+
+    if (argc >= 6)
+        nearestNeighbor = atoi(argv[5]);
+    
+    
+    pcl::ONIGrabber* grabber;
+    grabber = new  pcl::ONIGrabber(arg, false, false);
+    
+    SimpleONIViewer<pcl::PointXYZRGB> v(*grabber, nearestNeighbor, minRange_in, maxRange_in, fileout);
+    v.run();
     
     return (0);
 }

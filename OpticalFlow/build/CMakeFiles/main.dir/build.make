@@ -35,10 +35,10 @@ RM = /opt/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /opt/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/colin/code/OpticalFlow
+CMAKE_SOURCE_DIR = /Users/colin/code/Kinect-Projects/OpticalFlow
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/colin/code/OpticalFlow/build
+CMAKE_BINARY_DIR = /Users/colin/code/Kinect-Projects/OpticalFlow/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -51,17 +51,17 @@ include CMakeFiles/main.dir/flags.make
 
 CMakeFiles/main.dir/main.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/main.cpp.o: ../main.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /Users/colin/code/OpticalFlow/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/main.dir/main.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/main.dir/main.cpp.o -c /Users/colin/code/OpticalFlow/main.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/main.dir/main.cpp.o -c /Users/colin/code/Kinect-Projects/OpticalFlow/main.cpp
 
 CMakeFiles/main.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/main.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /Users/colin/code/OpticalFlow/main.cpp > CMakeFiles/main.dir/main.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /Users/colin/code/Kinect-Projects/OpticalFlow/main.cpp > CMakeFiles/main.dir/main.cpp.i
 
 CMakeFiles/main.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/main.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /Users/colin/code/OpticalFlow/main.cpp -o CMakeFiles/main.dir/main.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /Users/colin/code/Kinect-Projects/OpticalFlow/main.cpp -o CMakeFiles/main.dir/main.cpp.s
 
 CMakeFiles/main.dir/main.cpp.o.requires:
 .PHONY : CMakeFiles/main.dir/main.cpp.o.requires
@@ -97,6 +97,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	cd /Users/colin/code/OpticalFlow/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/colin/code/OpticalFlow /Users/colin/code/OpticalFlow /Users/colin/code/OpticalFlow/build /Users/colin/code/OpticalFlow/build /Users/colin/code/OpticalFlow/build/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/colin/code/Kinect-Projects/OpticalFlow/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/colin/code/Kinect-Projects/OpticalFlow /Users/colin/code/Kinect-Projects/OpticalFlow /Users/colin/code/Kinect-Projects/OpticalFlow/build /Users/colin/code/Kinect-Projects/OpticalFlow/build /Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/main.dir/depend
 

@@ -399,6 +399,7 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /opt/local/include/boost/mpl/aux_/reverse_fold_impl.hpp
  /opt/local/include/boost/mpl/aux_/reverse_fold_impl_body.hpp
  /opt/local/include/boost/mpl/aux_/sequence_wrapper.hpp
+ /opt/local/include/boost/mpl/aux_/size_impl.hpp
  /opt/local/include/boost/mpl/aux_/static_cast.hpp
  /opt/local/include/boost/mpl/aux_/template_arity.hpp
  /opt/local/include/boost/mpl/aux_/template_arity_fwd.hpp
@@ -509,6 +510,7 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /opt/local/include/boost/mpl/set/aux_/tag.hpp
  /opt/local/include/boost/mpl/set/aux_/value_type_impl.hpp
  /opt/local/include/boost/mpl/set/set0.hpp
+ /opt/local/include/boost/mpl/size.hpp
  /opt/local/include/boost/mpl/size_fwd.hpp
  /opt/local/include/boost/mpl/size_t.hpp
  /opt/local/include/boost/mpl/size_t_fwd.hpp
@@ -1190,48 +1192,6 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /opt/local/include/eigen3/Eigen/src/misc/Image.h
  /opt/local/include/eigen3/Eigen/src/misc/Kernel.h
  /opt/local/include/eigen3/Eigen/src/misc/Solve.h
- /opt/local/include/opencv2/calib3d/calib3d.hpp
- /opt/local/include/opencv2/contrib/contrib.hpp
- /opt/local/include/opencv2/core/core.hpp
- /opt/local/include/opencv2/core/core_c.h
- /opt/local/include/opencv2/core/mat.hpp
- /opt/local/include/opencv2/core/operations.hpp
- /opt/local/include/opencv2/core/types_c.h
- /opt/local/include/opencv2/core/version.hpp
- /opt/local/include/opencv2/features2d/features2d.hpp
- /opt/local/include/opencv2/flann/all_indices.h
- /opt/local/include/opencv2/flann/allocator.h
- /opt/local/include/opencv2/flann/autotuned_index.h
- /opt/local/include/opencv2/flann/composite_index.h
- /opt/local/include/opencv2/flann/dist.h
- /opt/local/include/opencv2/flann/flann.hpp
- /opt/local/include/opencv2/flann/flann_base.hpp
- /opt/local/include/opencv2/flann/general.h
- /opt/local/include/opencv2/flann/ground_truth.h
- /opt/local/include/opencv2/flann/heap.h
- /opt/local/include/opencv2/flann/index_testing.h
- /opt/local/include/opencv2/flann/kdtree_index.h
- /opt/local/include/opencv2/flann/kmeans_index.h
- /opt/local/include/opencv2/flann/linear_index.h
- /opt/local/include/opencv2/flann/logger.h
- /opt/local/include/opencv2/flann/matrix.h
- /opt/local/include/opencv2/flann/nn_index.h
- /opt/local/include/opencv2/flann/object_factory.h
- /opt/local/include/opencv2/flann/random.h
- /opt/local/include/opencv2/flann/result_set.h
- /opt/local/include/opencv2/flann/sampling.h
- /opt/local/include/opencv2/flann/saving.h
- /opt/local/include/opencv2/flann/timer.h
- /opt/local/include/opencv2/highgui/highgui.hpp
- /opt/local/include/opencv2/highgui/highgui_c.h
- /opt/local/include/opencv2/imgproc/imgproc.hpp
- /opt/local/include/opencv2/imgproc/imgproc_c.h
- /opt/local/include/opencv2/imgproc/types_c.h
- /opt/local/include/opencv2/ml/ml.hpp
- /opt/local/include/opencv2/objdetect/objdetect.hpp
- /opt/local/include/opencv2/opencv.hpp
- /opt/local/include/opencv2/video/background_segm.hpp
- /opt/local/include/opencv2/video/tracking.hpp
  /opt/local/include/vtk-5.6/vtk3DWidget.h
  /opt/local/include/vtk-5.6/vtkABI.h
  /opt/local/include/vtk-5.6/vtkAbstractArray.h
@@ -1407,10 +1367,35 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /usr/include/ni/XnTypes.h
  /usr/include/ni/XnUtils.h
  /usr/include/ni/XnVersion.h
+ /usr/local/include/opencv2/calib3d/calib3d.hpp
+ /usr/local/include/opencv2/contrib/contrib.hpp
+ /usr/local/include/opencv2/contrib/retina.hpp
+ /usr/local/include/opencv2/core/core.hpp
+ /usr/local/include/opencv2/core/core_c.h
+ /usr/local/include/opencv2/core/mat.hpp
+ /usr/local/include/opencv2/core/operations.hpp
+ /usr/local/include/opencv2/core/types_c.h
+ /usr/local/include/opencv2/core/version.hpp
+ /usr/local/include/opencv2/features2d/features2d.hpp
+ /usr/local/include/opencv2/flann/config.h
+ /usr/local/include/opencv2/flann/defines.h
+ /usr/local/include/opencv2/flann/miniflann.hpp
+ /usr/local/include/opencv2/highgui/highgui.hpp
+ /usr/local/include/opencv2/highgui/highgui_c.h
+ /usr/local/include/opencv2/imgproc/imgproc.hpp
+ /usr/local/include/opencv2/imgproc/imgproc_c.h
+ /usr/local/include/opencv2/imgproc/types_c.h
+ /usr/local/include/opencv2/ml/ml.hpp
+ /usr/local/include/opencv2/objdetect/objdetect.hpp
+ /usr/local/include/opencv2/opencv.hpp
+ /usr/local/include/opencv2/video/background_segm.hpp
+ /usr/local/include/opencv2/video/tracking.hpp
+ /usr/local/include/opencv2/video/video.hpp
  /usr/local/include/pcl-1.3/pcl/ModelCoefficients.h
  /usr/local/include/pcl-1.3/pcl/PointIndices.h
  /usr/local/include/pcl-1.3/pcl/PolygonMesh.h
  /usr/local/include/pcl-1.3/pcl/Vertices.h
+ /usr/local/include/pcl-1.3/pcl/cloud_properties.h
  /usr/local/include/pcl-1.3/pcl/common/angles.h
  /usr/local/include/pcl-1.3/pcl/common/common.h
  /usr/local/include/pcl-1.3/pcl/common/common_headers.h
@@ -1434,6 +1419,7 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /usr/local/include/pcl-1.3/pcl/console/time.h
  /usr/local/include/pcl-1.3/pcl/correspondence.h
  /usr/local/include/pcl-1.3/pcl/exceptions.h
+ /usr/local/include/pcl-1.3/pcl/for_each_type.h
  /usr/local/include/pcl-1.3/pcl/impl/point_types.hpp
  /usr/local/include/pcl-1.3/pcl/io/grabber.h
  /usr/local/include/pcl-1.3/pcl/io/oni_grabber.h
@@ -1449,12 +1435,11 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /usr/local/include/pcl-1.3/pcl/pcl_config.h
  /usr/local/include/pcl-1.3/pcl/pcl_macros.h
  /usr/local/include/pcl-1.3/pcl/point_cloud.h
+ /usr/local/include/pcl-1.3/pcl/point_traits.h
  /usr/local/include/pcl-1.3/pcl/point_types.h
  /usr/local/include/pcl-1.3/pcl/range_image/impl/range_image.hpp
  /usr/local/include/pcl-1.3/pcl/range_image/range_image.h
  /usr/local/include/pcl-1.3/pcl/ros/conversions.h
- /usr/local/include/pcl-1.3/pcl/ros/for_each_type.h
- /usr/local/include/pcl-1.3/pcl/ros/point_traits.h
  /usr/local/include/pcl-1.3/pcl/ros/register_point_struct.h
  /usr/local/include/pcl-1.3/pcl/visualization/cloud_viewer.h
  /usr/local/include/pcl-1.3/pcl/visualization/common/actor_map.h
@@ -1474,7 +1459,6 @@ CMakeFiles/oni2depth.dir/oni2depth.cpp.o
  /usr/local/include/pcl-1.3/pcl/visualization/point_picking_event.h
  /usr/local/include/pcl-1.3/pcl/visualization/range_image_visualizer.h
  /usr/local/include/pcl-1.3/pcl/visualization/window.h
- /usr/local/include/pcl-1.3/pcl/win32_macros.h
  /usr/local/include/pcl-1.3/sensor_msgs/Image.h
  /usr/local/include/pcl-1.3/sensor_msgs/PointCloud2.h
  /usr/local/include/pcl-1.3/sensor_msgs/PointField.h

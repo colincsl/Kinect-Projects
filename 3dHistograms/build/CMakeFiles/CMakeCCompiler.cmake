@@ -46,4 +46,4 @@ SET(CMAKE_C_HAS_ISYSROOT "1")
 SET(CMAKE_C_OSX_DEPLOYMENT_TARGET_FLAG "-mmacosx-version-min=")
 
 SET(CMAKE_C_IMPLICIT_LINK_LIBRARIES "")
-SET(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/usr/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/usr/lib/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib/gcc;/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1;/usr/lib/gcc/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib;/Developer/usr/llvm-gcc-4.2/lib")
+SET(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "")

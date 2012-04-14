@@ -13,29 +13,35 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
+
 #include <iostream>
 #include <vector>
 #include <cmath>
 
 using namespace std;
 using namespace pcl::io;
-using namespace boost;
+using namespace cv;
 using pcl::PointXYZRGB;
-using pcl::Histogram;
+//using pcl::Histogram;
 
 #define VIZ 1
 #define HOME 0
 
-template <typename PointType, int N>
+template <typename PointType>
 class Histograms
 {
   public:
-    Histograms () : viewer ("KinectGrabber"), histViz_x()
+    Histograms () : viewer ("KinectGrabber"), /*histViz_x(),*/ histWindow(Mat::zeros(300, 800, CV_8UC1))
     {
-        hist_x_h.points.resize(1);
-        for (int i=0; i<N; i++) hist_x_h.points[0].histogram[i] = 0;
-        histViz_x.addFeatureHistogram(hist_x_h, N, "X");
-        histViz_x.setBackgroundColor(0, 0, 0);
+//        hist_x_h.points.resize(1);
+//        for (int i=0; i<N; i++) hist_x_h.points[0].histogram[i] = 0;
+//        histViz_x.addFeatureHistogram(hist_x_h, N, "X");
+//        histViz_x.setBackgroundColor(0, 0, 0);
+
+        namedWindow("3D Histogram");
+        histMax = 300;
     };
 
 
@@ -48,7 +54,7 @@ class Histograms
 
 //        pcl::PointCloud<pcl::PointXYZRGB>::Ptr output (new pcl::PointCloud<pcl::PointXYZRGB>);
         int pxCount = 640*480;
-        const int bins = 10;
+        const int bins = 100;
         int px_bin_x, px_bin_y, px_bin_z;
         
         float min_x, min_y, min_z;
@@ -74,7 +80,6 @@ class Histograms
             else if (max_z < cloud->points[i].z)
                 max_z = cloud->points[i].z;            
         }
-
         float max_ = max(max(max_x, max_y), max_z);
         float min_ = min(min(min_x, min_y), min_z);
         float inc = (max_-min_)/bins;
@@ -85,12 +90,6 @@ class Histograms
         
         for (size_t i = 0; i < cloud->points.size (); ++i)
         {
-//            PointXYZRGB pt;
-//            pt.x = cloud->points[i].x;
-//            pt.y = cloud->points[i].y;
-//            pt.z = cloud->points[i].z;
-            // Pack RGB into a float
-//            pt.rgb = *(float*)(&cloud->points[i].rgb);
             if (!isnan(cloud->points[i].y))
             {
                 px_bin_x =  round(((cloud->points[i].x - min_x)/inc));
@@ -113,19 +112,34 @@ class Histograms
             cout << hist_x[i] << "\t\t" << hist_y[i] << "\t\t" << hist_z[i] << endl;
         cout << "---------------------" << endl;
         
-        
-        
-        
-//        for (int i=0; i<N; i++) hist_x_h.points[0].histogram[i] = 0;
+        // Find max value(s)
+        int max_hist_z = 0;
         for (int i=0; i<bins; i++)
         {
-            hist_x_h.points[0].histogram[i] = hist_x[i];
-
+            if (hist_z[i] > max_hist_z)
+                max_hist_z = hist_z[i];
         }
         
-        //histViz_x.spinOnce();
+        // Display in histWindow frame
+        float z_conversion = 250.0 / (float)max_hist_z;
+        float width_conversion = 800 / (bins+1);
+        histWindow = Mat::zeros(300,800, CV_8UC1);
+        for (int i_ind = 0; i_ind < bins; i_ind++)
+        {
+            int tmp_height = hist_z[i_ind]*z_conversion;
+            for (int i=0; i < tmp_height; i++)
+            {
+                histWindow.at<char>(histMax-i, i_ind*width_conversion+width_conversion/2) = (char)255;
+            }
+        }
+        
+        // the window freezes up!
+        imshow("3D Histogram", histWindow);
+        waitKey(33);
+        
+        
         viewer.showCloud (cloud);
-
+        
         return;
     };
     
@@ -135,7 +149,6 @@ class Histograms
       pcl::Grabber* interface = new pcl::OpenNIGrabber(device_id);
 
       boost::function<void (const CloudConstPtr&)> f = boost::bind (&Histograms::cloud_cb_, this, _1);
-
       boost::signals2::connection c = interface->registerCallback (f);
 
       pcl_sleep(.5);
@@ -144,16 +157,18 @@ class Histograms
 
       while (true)
       {
-        pcl_sleep (.5);
+        pcl_sleep (.1);
       }
 
       interface->stop ();
     };
 
     pcl::visualization::CloudViewer viewer;
-    boost::mutex mutex_;
-    pcl::visualization::PCLHistogramVisualizer histViz_x;
-    pcl::PointCloud<pcl::Histogram<N> > hist_x_h;
+    boost::mutex mutex_;    
+    Mat histWindow;
+    int histMax;
+    //    pcl::visualization::PCLHistogramVisualizer histViz_x;
+    //    pcl::PointCloud<pcl::Histogram<N> > hist_x_h;    
 
 };
 
@@ -169,12 +184,9 @@ int main (int argc, char** argv)
     {
         device_id = argv[1];
     }
-    if (argc >= 3)
-    {
-//        nn_connectivity = atoi (argv[2]);
-    }
+
     int bins = 10;
-    Histograms<PointXYZRGB, 10> v;
+    Histograms<PointXYZRGB> v;
     v.run(device_id);
 
     return 0;

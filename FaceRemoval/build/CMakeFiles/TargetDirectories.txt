@@ -1,1 +1,3 @@
 /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles/main.dir
+/Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles/reader.dir
+/Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles/remover.dir

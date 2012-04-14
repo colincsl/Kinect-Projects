@@ -88,6 +88,76 @@ clean: CMakeFiles/main.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/reader.dir
+
+# All Build rule for target.
+CMakeFiles/reader.dir/all:
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/depend
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles  2
+	@echo "Built target reader"
+.PHONY : CMakeFiles/reader.dir/all
+
+# Include target in all.
+all: CMakeFiles/reader.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/reader.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/reader.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles 0
+.PHONY : CMakeFiles/reader.dir/rule
+
+# Convenience name for target.
+reader: CMakeFiles/reader.dir/rule
+.PHONY : reader
+
+# clean rule for target.
+CMakeFiles/reader.dir/clean:
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/clean
+.PHONY : CMakeFiles/reader.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/reader.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/remover.dir
+
+# All Build rule for target.
+CMakeFiles/remover.dir/all:
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/depend
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles  3
+	@echo "Built target remover"
+.PHONY : CMakeFiles/remover.dir/all
+
+# Include target in all.
+all: CMakeFiles/remover.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/remover.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles 1
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/remover.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/Kinect-Projects/FaceRemoval/build/CMakeFiles 0
+.PHONY : CMakeFiles/remover.dir/rule
+
+# Convenience name for target.
+remover: CMakeFiles/remover.dir/rule
+.PHONY : remover
+
+# clean rule for target.
+CMakeFiles/remover.dir/clean:
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/clean
+.PHONY : CMakeFiles/remover.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/remover.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Special targets to cleanup operation of make.
 
 # Special rule to run CMake to check the build system integrity.

@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/colin/code/OpticalFlow/main.cpp" "/Users/colin/code/OpticalFlow/build/CMakeFiles/main.dir/main.cpp.o"
+  "/Users/colin/code/Kinect-Projects/OpticalFlow/main.cpp" "/Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles/main.dir/main.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

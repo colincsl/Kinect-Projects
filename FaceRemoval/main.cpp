@@ -6,12 +6,15 @@
 #include <vector>
 #include <cmath>
 #include <stdio.h>
+#include <time.h>
 using namespace std;
+
 
 //PCL dependencies
 
 #include <pcl/io/openni_grabber.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/io/ply_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/impl/point_types.hpp>
@@ -37,7 +40,9 @@ using namespace cv;
 
 #define VIZ 1
 #define HOME 0
-String face_cascade_name = "/Users/colin/libs/kinect/opencv/opencv/data/lbpcascades/lbpcascade_frontalface.xml";
+//String face_cascade_name = "/Users/colin/libs/kinect/opencv/opencv/data/lbpcascades/lbpcascade_frontalface.xml";
+String face_cascade_name = "/Users/colin/libs/kinect/opencv/opencv/data/haarcascades/haarcascade_frontalface_alt2.xml";
+String profile_cascade_name = "/Users/colin/libs/kinect/opencv/opencv/data/haarcascades/haarcascade_profileface.xml";
 String eyes_cascade_name = "haarcascade_eye_tree_eyeglasses.xml";
 //CascadeClassifier face_cascade;
 //CascadeClassifier eyes_cascade;
@@ -82,12 +87,16 @@ class FaceRemoval
         int height = 480;
         int width = 640;
         int index=0;
-        //cloud->points = cloud_->points;
+        unsigned int color;
+
         for (int j=0; j<height; j++)
         {
             for (int i=0; i<width; i++)
             {
-                img.at<char>(j,i) = (char)cloud->points[index].r;
+                color = ((unsigned int)cloud->points[index].r+(unsigned int)cloud->points[index].g+(unsigned int)cloud->points[index].b)/3;
+                img.at<char>(j,i) = (char)color;                
+//                img.at<char>(j,i) = cloud->points[index].r;
+                
                 index++;
             }
         }
@@ -118,8 +127,22 @@ class FaceRemoval
         
         #ifdef VIZ
         viewer.showCloud (cloud);
+//        viewer.addPointCloud (cloud);        
+        
+//        viewer.saveScreenshot (filename);
         #endif
 
+        string filename = "cloud_";        
+        time_t rawtime;
+        time(&rawtime);
+        filename.append(ctime(&rawtime));
+        filename.append(".pcd");
+
+
+        pcdWrite.writeBinaryCompressed(filename, *cloud);            
+//        pcl::io::savePCDFileASCII ("ascii.pcd", cloud);
+//        pcl::io::savePCDFileBinary ("bin.pcd", cloud);
+        
         mutex_.unlock();
         
         return;
@@ -130,10 +153,19 @@ class FaceRemoval
     inline std::vector<Rect> detectFaces()
     {
         std::vector<Rect> faces;
+        std::vector<Rect> faces_profile;        
         
         equalizeHist(img, img);
         
-        face_cascade.detectMultiScale(img, faces, 1.1, 2, 0, Size(80, 80));
+        // Params: image, faceVector, relative scale, req. neighbor #, flag, minSize
+        face_cascade.detectMultiScale(img, faces, 1.1, 1, 0, Size(30, 30));
+        face_cascade.detectMultiScale(img, faces_profile, 1.1, 1, 0, Size(30, 30)); 
+        
+        while (faces_profile.size() > 0)
+        {
+            faces.push_back(faces_profile.back());
+            faces_profile.pop_back();
+        }
         
         for (int i=0; i<faces.size(); i++)
         {
@@ -150,45 +182,47 @@ class FaceRemoval
     {
         
         if( !face_cascade.load( face_cascade_name ) ){ printf("--(!)Error loading Faces\n"); return false; };
+        if( !profile_cascade.load( profile_cascade_name ) ){ printf("--(!)Error loading Profiles\n"); return false; };        
 //        if( !eyes_cascade.load( eyes_cascade_name ) ){ printf("--(!)Error loading Eyes\n"); return false; };
 
-      pcl::Grabber* interface = new pcl::OpenNIGrabber(device_id);
-
+        
+        pcl::Grabber* interface = new pcl::OpenNIGrabber(device_id);
 
         boost::function<void ( const CloudConstPtr&)> f = boost::bind (&FaceRemoval::cloud_cb_, this, _1);
+        boost::signals2::connection c = interface->registerCallback (f);
 
-        
-      boost::signals2::connection c = interface->registerCallback (f);
-
-//      pcl_sleep(.5);
-      interface->start ();
+        interface->start ();
 
 
-      while (true)
-      {
-        pcl_sleep (1);
-          imshow( "win", img );
-          waitKey(33);
-          cout << "img" << endl;
-          
-      }
+        while (true)
+        {
+            pcl_sleep (1);
+            imshow( "win", img );
+            waitKey(33);
+            cout << "img" << endl;
+        }
 
-      interface->stop ();
-        
+        interface->stop ();
+
         return true;
     };
 
     // Class vars
     #ifdef VIZ
         pcl::visualization::CloudViewer viewer;
+//    pcl::visualization::PCLVisualizer viewer;
+    
     #endif
     boost::mutex mutex_;
 //    Cloud cloud;
 //    CloudConstPtr cloud_ptr;
     CloudPtr cloud;    
     Mat img;
+    PCDWriter pcdWrite;
+    
     CascadeClassifier face_cascade;
-    CascadeClassifier eyes_cascade;
+    CascadeClassifier profile_cascade;    
+//    CascadeClassifier eyes_cascade;
 
 };
 

@@ -1,1 +1,1 @@
-/Users/colin/code/OpticalFlow/build/CMakeFiles/main.dir
+/Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles/main.dir

@@ -1,1 +1,3 @@
+/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/ALL_BUILD.dir
+/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/ZERO_CHECK.dir
 /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/main.dir

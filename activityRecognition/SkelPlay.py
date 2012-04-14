@@ -278,8 +278,14 @@ cy_d = 2.4273913761751615e+02;
 def depth2world(x_, y=0, d=0):
     if type(x_) == list:
         x = np.array(x_[0])        
-        y = np.array(x_[1])
+        y =-np.array(x_[1])
         d = np.array(x_[2])
+    elif type(x_) == np.ndarray:
+        x = 640 - np.array(x_[:,1])   
+        y = 480 - np.array(x_[:,0])
+        # y = 480 - np.array(x_[:,0])
+        d = np.array(x_[:,2])
+        # d = np.maximum(1, d)
     else:
         x = x_
     if np.all(d==0):
@@ -287,7 +293,7 @@ def depth2world(x_, y=0, d=0):
     xo = ((x - cx_d) * d * fx_d)
     yo = ((y - cy_d) * d * fy_d)
     zo = d
-    return [xo, yo, zo]
+    return np.array([xo, yo, zo]).T
 
 def world2depth(x_, y=0, z=0):
     if type(x_) == list:
@@ -307,10 +313,11 @@ def world2depth(x_, y=0, z=0):
 
     # if z < 500:
     #     return [0,0,0]  
-    xo = np.array((np.round(x / fx_d / z + cx_d)), dtype=np.int)
-    yo = np.array((np.round((y / fy_d / z) + cy_d)), dtype=np.int)
+    yo = 640 - np.array((np.round(x / fx_d / z + cx_d)), dtype=np.int)
+    xo = 480 - np.array((np.round((y / fy_d / z) + cy_d)), dtype=np.int)
     do = np.array(z, dtype=np.int)
-    return [xo, yo, do]
+    return np.array([xo, yo, do])
+    # return [xo, yo, do]
 
 import pdb
 def displaySkeleton_CV(img, skels):

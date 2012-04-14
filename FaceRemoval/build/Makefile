@@ -111,6 +111,80 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+#=============================================================================
+# Target rules for targets named reader
+
+# Build rule for target.
+reader: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 reader
+.PHONY : reader
+
+# fast build rule for target.
+reader/fast:
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/build
+.PHONY : reader/fast
+
+#=============================================================================
+# Target rules for targets named remover
+
+# Build rule for target.
+remover: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 remover
+.PHONY : remover
+
+# fast build rule for target.
+remover/fast:
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/build
+.PHONY : remover/fast
+
+CloudSequenceReader.o: CloudSequenceReader.cpp.o
+.PHONY : CloudSequenceReader.o
+
+# target to build an object file
+CloudSequenceReader.cpp.o:
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/CloudSequenceReader.cpp.o
+.PHONY : CloudSequenceReader.cpp.o
+
+CloudSequenceReader.i: CloudSequenceReader.cpp.i
+.PHONY : CloudSequenceReader.i
+
+# target to preprocess a source file
+CloudSequenceReader.cpp.i:
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/CloudSequenceReader.cpp.i
+.PHONY : CloudSequenceReader.cpp.i
+
+CloudSequenceReader.s: CloudSequenceReader.cpp.s
+.PHONY : CloudSequenceReader.s
+
+# target to generate assembly for a file
+CloudSequenceReader.cpp.s:
+	$(MAKE) -f CMakeFiles/reader.dir/build.make CMakeFiles/reader.dir/CloudSequenceReader.cpp.s
+.PHONY : CloudSequenceReader.cpp.s
+
+FaceRemovalSequenceReader.o: FaceRemovalSequenceReader.cpp.o
+.PHONY : FaceRemovalSequenceReader.o
+
+# target to build an object file
+FaceRemovalSequenceReader.cpp.o:
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/FaceRemovalSequenceReader.cpp.o
+.PHONY : FaceRemovalSequenceReader.cpp.o
+
+FaceRemovalSequenceReader.i: FaceRemovalSequenceReader.cpp.i
+.PHONY : FaceRemovalSequenceReader.i
+
+# target to preprocess a source file
+FaceRemovalSequenceReader.cpp.i:
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/FaceRemovalSequenceReader.cpp.i
+.PHONY : FaceRemovalSequenceReader.cpp.i
+
+FaceRemovalSequenceReader.s: FaceRemovalSequenceReader.cpp.s
+.PHONY : FaceRemovalSequenceReader.s
+
+# target to generate assembly for a file
+FaceRemovalSequenceReader.cpp.s:
+	$(MAKE) -f CMakeFiles/remover.dir/build.make CMakeFiles/remover.dir/FaceRemovalSequenceReader.cpp.s
+.PHONY : FaceRemovalSequenceReader.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -143,7 +217,15 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... main"
+	@echo "... reader"
 	@echo "... rebuild_cache"
+	@echo "... remover"
+	@echo "... CloudSequenceReader.o"
+	@echo "... CloudSequenceReader.i"
+	@echo "... CloudSequenceReader.s"
+	@echo "... FaceRemovalSequenceReader.o"
+	@echo "... FaceRemovalSequenceReader.i"
+	@echo "... FaceRemovalSequenceReader.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

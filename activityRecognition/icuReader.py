@@ -84,7 +84,7 @@ def getRGBImage(rgbFilename):
 	return imgData.reshape([480, 640, 3])
 
 class ICUReader:
-	def __init__(self, path, framerate=30, timeOffset=0, clockTime=0, cameraNumber=0, viz=1, vizSkel=0, skelsEnabled=1):
+	def __init__(self, path, framerate=30, timeOffset=0, clockTime=0, cameraNumber=0, viz=1, vizSkel=0, skelsEnabled=1, serial=0):
 		self.path = path
 		self.framerate = framerate
 		self.timeOffset = timeOffset
@@ -108,6 +108,24 @@ class ICUReader:
 		else:
 			self.startTime = clockTime
 
+		self.serial = serial
+		self.allPaths = []
+		if serial:
+			for i in (self.DirNames):
+				os.chdir(i)
+				files = os.listdir('.')
+				# for i in range(len(files)-1, -1, -1):
+				# 	del files[i]
+				fileTmp = []
+				for j in files:
+					if j[-5:] != 'depth':
+						continue
+					fileTmp.append(j)
+					filesTmp2 = [i+"/"+x for x in files if x[:x.find(".")] == fileTmp[-1][:fileTmp[-1].find(".")] and x != fileTmp[:-1]]
+
+					self.allPaths.append([filesTmp2])
+				os.chdir('..')
+
 	def reset(self, time):
 		self.startTime = time.time()
 
@@ -115,148 +133,163 @@ class ICUReader:
 	def run(self, initTime=0):
 		os.chdir(self.path)
 
-		currentDirTime = 0
-		if initTime == 0:
-			initTime = time.time()
-		currentTime = (initTime - self.startTime) * (self.framerate / 30.0) + self.timeOffset
-		# print currentTime
-		# currentTime = (initTime - self.startTime) * (self.framerate / 30.0)
-
-		# Get current directory
-		for i in xrange(len(self.DirNames)):
-			if 0:#currentTime < (getFolderTime(self.DirNames[i])-self.startDirTime):
-				continue
-			else:
-				if i+1 < len(self.DirNames):
-					if currentTime < (getFolderTime(self.DirNames[i+1])-self.startDirTime):
-						currentDirTime = getFolderTime(self.DirNames[i])
-						os.chdir(self.path+self.DirNames[i])
-						# self.DirNames.pop(i)
-						break
-					else:
-						continue
-				else:
-					currentDirTime = getFolderTime(self.DirNames[i])
-					os.chdir(self.path+self.DirNames[i])
-					# self.DirNames.pop(i)
-					break
-
-		if currentDirTime > 0:
-			filenames = os.listdir('.')
-			times = getFileListTimes(filenames)
-			depthFilename = []
-			rgbFilename = []
-			skelFilename = []
-
-			# pdb.set_trace()
-
-			tmp = ((currentDirTime - self.startDirTime))
+		if self.serial:
+			files = self.allPaths.pop(0)[0]
+			self.currentDirTime = getFolderTime(files[0][:files[0].find("/")])
+			tmp = ((self.currentDirTime - self.startDirTime))
 			tmpMin = int(tmp/60.0)
 			tmpSec = int(tmp - tmpMin*60)
 			tmp2 = (self.endDirTime-self.startDirTime)
 			tmpTotMin = int(floor(tmp2/60.0))
 			tmpTotSec = int(tmp2 - tmpTotMin*60)
 			self.timeMin = tmpMin
-			self.timeSec = tmpSec
-			# print "C" + str(self.cameraNumber) + "	Time: " + str(tmpMin) + " min " + str(tmpSec) + " sec of " + str(tmpTotMin) + " min " + str(tmpTotSec) + " sec"
+			self.timeSec = tmpSec			
+		else:
+			self.currentDirTime = 0
+			if initTime == 0:
+				initTime = time.time()
+			currentTime = (initTime - self.startTime) * (self.framerate / 30.0) + self.timeOffset
+			# print currentTime
+			# currentTime = (initTime - self.startTime) * (self.framerate / 30.0)
 
-			# Get current time
-			files = []
-					
-			#Get closest fileset
-			for t in xrange(len(times)):
-				if currentTime > times[t][0] - self.startDirTime:
-					if (t+1)<len(times):
-						if currentTime < times[t+1][0] - self.startDirTime:
-							files = times[t][1]
-						else:
-							continue
+			# Get current directory
+			for i in xrange(len(self.DirNames)):
+				if i+1 < len(self.DirNames):
+					if currentTime < (getFolderTime(self.DirNames[i+1])-self.startDirTime):
+						self.currentDirTime = getFolderTime(self.DirNames[i])
+						os.chdir(self.path+self.DirNames[i])
+						# self.DirNames.pop(i)
+						break
 					else:
-						files = times[t][1]
+						continue
 				else:
+					self.currentDirTime = getFolderTime(self.DirNames[i])
+					os.chdir(self.path+self.DirNames[i])
+					# self.DirNames.pop(i)
 					break
 
-			# Get filenames
-			if len(files) > 0:
-				for i in files:
-					if i[-5:] == 'depth':
-						depthFilename = i
-						self.depthFilename = depthFilename
-					if i[-3:] == 'rgb':
-						rgbFilename = i
-						self.rgbFilename = rgbFilename
-					if self.skelsEnabled:
-						if i[-4:] == 'skel':
-							skelFilename = i
-							self.skelFilename = skelFilename
+			if self.currentDirTime > 0:
+				filenames = os.listdir('.')
+				times = getFileListTimes(filenames)
 
-				displayUsers = []
-				skels = []
-				if len(skelFilename) > 0:
-					users = SR.readUserData(skelFilename)
-					skels = SR.readSkeletonData(skelFilename)
-					for i in users:
-						displayUsers.append(users[i]['Img'])
+				# pdb.set_trace()
 
-					#eliminate bad skeleton data (joint data is linked to old data)
-					# pdb.set_trace()
-					deleteInd = []
-					for i in users.keys():
-						# print users[i]['Img']
-						if users[i]['Img'][2] == 0:
-							deleteInd.append(i)
-					deleteInd.sort(reverse=1)
-					for i in deleteInd:
-						# print "Del", i
-						del users[i]
-						del skels[i]
-						del displayUsers[i-1]
+				tmp = ((self.currentDirTime - self.startDirTime))
+				tmpMin = int(tmp/60.0)
+				tmpSec = int(tmp - tmpMin*60)
+				tmp2 = (self.endDirTime-self.startDirTime)
+				tmpTotMin = int(floor(tmp2/60.0))
+				tmpTotSec = int(tmp2 - tmpTotMin*60)
+				self.timeMin = tmpMin
+				self.timeSec = tmpSec
+				# print "C" + str(self.cameraNumber) + "	Time: " + str(tmpMin) + " min " + str(tmpSec) + " sec of " + str(tmpTotMin) + " min " + str(tmpTotSec) + " sec"
 
-				if len(depthFilename) > 0:
-					## 1
-					# depthRaw = open(depthFilename, 'rb').read().split()
-					# depthRaw = np.fromfile(depthFilename, dtype=np.uint16, sep=" ")
-					# self.depthData = np.array(depthRaw, dtype=int).reshape([480,640])[:,::-1]
-					# self.depthData = self.depthData[:,::-1]
-					## 2
-					# self.depthData = np.fromfile(depthFilename, dtype=np.uint16, sep=" ").reshape([480, 640])[:,::-1]
-					# self.depthDataRaw = self.depthData
-					## 3
-					x = open(depthFilename).read()
-					self.depthDataRaw = np.fromstring(x, dtype=np.uint16, sep=" ").reshape([480, 640])[:,::-1]	
+				# Get current time
+				files = []
+						
+				#Get closest fileset
+				for t in xrange(len(times)):
+					if currentTime > times[t][0] - self.startDirTime:
+						if (t+1)<len(times):
+							if currentTime < times[t+1][0] - self.startDirTime:
+								files = times[t][1]
+							else:
+								continue
+						else:
+							files = times[t][1]
+					else:
+						break
 
-					# print "User count: ", len(displayUsers)
-					# print displayUsers
-					if self.viz:
-						self.depthData = constrain(self.depthDataRaw)
-						try:
-							for i in displayUsers:
-								if i[0] != 0:
-									for x in xrange(-10,10):
-										for j in xrange(-1,1):
-											self.depthData[480 - i[1]+j, 640 - i[0]+x] = 30
-									for y in xrange(-10, 10):
-										for j in xrange(-1,1):
-											self.depthData[480 - i[1]+y, 640 - i[0]+j] = 30
-						except:
-							print "Error adding cross at", i
+		self.getFrameData(files)
 
-					# self.depthData = cv.fromarray(np.array(self.depthData, dtype=np.uint8))
-					# print "Skels: ", len(skels)
-					# print skels
-					if skels != [] and self.vizSkel:
-						self.depthData = cv.fromarray(np.array(self.depthData, dtype=np.uint8))
-						self.depthData = SR.displaySkeleton_CV(self.depthData, skels)
-					if self.viz:
-						self.depthData = cv.fromarray(np.array(self.depthData, dtype=np.uint8))
-						cv2.imshow(self.windowName, np.array(self.depthData, dtype=np.uint8))
+	def getFrameData(self, files):
+		depthFilename = []
+		rgbFilename = []
+		skelFilename = []
 
-				if len(rgbFilename) > 0:
-					imgData = np.fromfile(rgbFilename, dtype=np.uint8)
-					imgData = imgData.reshape([480, 640, 3])
-					if self.viz:
-						cv2.imshow("RGB", imgData)
+		# pdb.set_trace()
 
-				cv.WaitKey(1)
+		# Get filenames
+		if len(files) > 0:
+			for i in files:
+				if i[-5:] == 'depth':
+					depthFilename = i
+					self.depthFilename = depthFilename
+				if i[-3:] == 'rgb':
+					rgbFilename = i
+					self.rgbFilename = rgbFilename
+				if self.skelsEnabled:
+					if i[-4:] == 'skel':
+						skelFilename = i
+						self.skelFilename = skelFilename
+
+			displayUsers = []
+			skels = []
+			if len(skelFilename) > 0:
+				users = SR.readUserData(skelFilename)
+				skels = SR.readSkeletonData(skelFilename)
+				for i in users:
+					displayUsers.append(users[i]['Img'])
+
+				#eliminate bad skeleton data (joint data is linked to old data)
+				# pdb.set_trace()
+				deleteInd = []
+				for i in users.keys():
+					# print users[i]['Img']
+					if users[i]['Img'][2] == 0:
+						deleteInd.append(i)
+				deleteInd.sort(reverse=1)
+				for i in deleteInd:
+					# print "Del", i
+					del users[i]
+					del skels[i]
+					del displayUsers[i-1]
+
+			if len(depthFilename) > 0:
+				## 1
+				# depthRaw = open(depthFilename, 'rb').read().split()
+				# depthRaw = np.fromfile(depthFilename, dtype=np.uint16, sep=" ")
+				# self.depthData = np.array(depthRaw, dtype=int).reshape([480,640])[:,::-1]
+				# self.depthData = self.depthData[:,::-1]
+				## 2
+				# self.depthData = np.fromfile(depthFilename, dtype=np.uint16, sep=" ").reshape([480, 640])[:,::-1]
+				# self.depthDataRaw = self.depthData
+				## 3
+				x = open(depthFilename).read()
+				self.depthDataRaw = np.fromstring(x, dtype=np.uint16, sep=" ").reshape([480, 640])[:,::-1]	
+
+				# print "User count: ", len(displayUsers)
+				# print displayUsers
+				if self.viz:
+					self.depthData = constrain(self.depthDataRaw)
+					try:
+						for i in displayUsers:
+							if i[0] != 0:
+								for x in xrange(-10,10):
+									for j in xrange(-1,1):
+										self.depthData[480 - i[1]+j, 640 - i[0]+x] = 30
+								for y in xrange(-10, 10):
+									for j in xrange(-1,1):
+										self.depthData[480 - i[1]+y, 640 - i[0]+j] = 30
+					except:
+						print "Error adding cross at", i
+
+				# self.depthData = cv.fromarray(np.array(self.depthData, dtype=np.uint8))
+				# print "Skels: ", len(skels)
+				# print skels
+				if skels != [] and self.vizSkel:
+					self.depthData = cv.fromarray(np.array(self.depthData, dtype=np.uint8))
+					self.depthData = SR.displaySkeleton_CV(self.depthData, skels)
+				if self.viz:
+					self.depthData = cv.fromarray(np.array(self.depthData, dtype=np.uint8))
+					cv2.imshow(self.windowName, np.array(self.depthData, dtype=np.uint8))
+
+			if len(rgbFilename) > 0:
+				imgData = np.fromfile(rgbFilename, dtype=np.uint8)
+				imgData = imgData.reshape([480, 640, 3])
+				if self.viz:
+					cv2.imshow("RGB", imgData)
+
+			cv.WaitKey(1)
 
 

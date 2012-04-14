@@ -10,9 +10,10 @@ SET(CMAKE_FORCE_UNIX_PATHS 1)
 
 # The C and CXX include file search paths:
 SET(CMAKE_C_INCLUDE_PATH
-  "/opt/local/include/opencv"
-  "/opt/local/include"
+  "/usr/local/include/opencv"
+  "/usr/local/include"
   "/opt/local/include/vtk-5.6"
+  "/opt/local/include"
   "/opt/local/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6"
   "/usr/local/include/pcl-1.3"
   "/opt/local/include/eigen3"

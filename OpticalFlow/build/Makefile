@@ -39,10 +39,10 @@ RM = /opt/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /opt/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/colin/code/OpticalFlow
+CMAKE_SOURCE_DIR = /Users/colin/code/Kinect-Projects/OpticalFlow
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/colin/code/OpticalFlow/build
+CMAKE_BINARY_DIR = /Users/colin/code/Kinect-Projects/OpticalFlow/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/OpticalFlow/build/CMakeFiles /Users/colin/code/OpticalFlow/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles /Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/OpticalFlow/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/colin/code/Kinect-Projects/OpticalFlow/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

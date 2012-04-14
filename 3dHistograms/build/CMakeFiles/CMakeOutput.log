@@ -226,3 +226,142 @@ Parsed CXX implicit link information from above output:
   implicit dirs: [/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/usr/lib/gcc/i686-apple-darwin11/4.2.1/x86_64;/usr/lib/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib/gcc;/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1;/usr/lib/gcc/i686-apple-darwin11/4.2.1;/usr/llvm-gcc-4.2/lib;/Developer/usr/llvm-gcc-4.2/lib]
 
 
+The system is: Darwin - 11.2.0 - i386
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/gcc 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/g++ 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/local/bin/cmakexbuild -project CMAKE_TRY_COMPILE.xcodeproj build -target cmTryCompileExec -configuration Debug
+=== BUILD NATIVE TARGET cmTryCompileExec OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+Check dependencies
+
+CompileC CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/testCCompiler.o testCCompiler.c normal x86_64 c com.apple.compilers.llvmgcc42
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-gcc-4.2 -x c -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 "-DCMAKE_INTDIR=\"Debug\"" -isysroot /Developer/SDKs/MacOSX10.7.sdk -fasm-blocks -mmacosx-version-min=10.7 -gdwarf-2 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/include -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources/x86_64 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/testCCompiler.c -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/testCCompiler.o
+
+Ld Debug/cmTryCompileExec normal x86_64
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-gcc-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.7.sdk -L/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -filelist /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/cmTryCompileExec.LinkFileList -mmacosx-version-min=10.7 -Wl,-search_paths_first -Wl,-headerpad_max_install_names -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec
+
+PhaseScriptExecution "CMake PostBuild Rules" CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-E9B3BE116EE5472894EB7872.sh
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /bin/sh -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-E9B3BE116EE5472894EB7872.sh
+echo "Depend check for xcode"
+Depend check for xcode
+cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp && make -C /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp -f /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMakeScripts/XCODE_DEPEND_HELPER.make PostBuild.cmTryCompileExec.Debug
+make[1]: Nothing to be done for `PostBuild.cmTryCompileExec.Debug'.
+
+
+** BUILD SUCCEEDED **
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/local/bin/cmakexbuild -project CMAKE_TRY_COMPILE.xcodeproj build -target cmTryCompileExec -configuration Debug
+=== BUILD NATIVE TARGET cmTryCompileExec OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+Check dependencies
+
+CompileC CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/CMakeCCompilerABI.o ../../../../../../../../opt/local/share/cmake-2.8/Modules/CMakeCCompilerABI.c normal x86_64 c com.apple.compilers.llvmgcc42
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-gcc-4.2 -x c -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 "-DCMAKE_INTDIR=\"Debug\"" -isysroot /Developer/SDKs/MacOSX10.7.sdk -fasm-blocks -mmacosx-version-min=10.7 -gdwarf-2 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/include -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources/x86_64 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/../../../../../../../../opt/local/share/cmake-2.8/Modules/CMakeCCompilerABI.c -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/CMakeCCompilerABI.o
+
+Ld Debug/cmTryCompileExec normal x86_64
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-gcc-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.7.sdk -L/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -filelist /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/cmTryCompileExec.LinkFileList -mmacosx-version-min=10.7 -v -Wl,-search_paths_first -Wl,-headerpad_max_install_names -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec
+
+PhaseScriptExecution "CMake PostBuild Rules" CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-08B421D8E8924BC08D684C43.sh
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /bin/sh -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-08B421D8E8924BC08D684C43.sh
+echo "Depend check for xcode"
+Depend check for xcode
+cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp && make -C /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp -f /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMakeScripts/XCODE_DEPEND_HELPER.make PostBuild.cmTryCompileExec.Debug
+make[1]: Nothing to be done for `PostBuild.cmTryCompileExec.Debug'.
+
+
+** BUILD SUCCEEDED **
+
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/local/bin/cmakexbuild -project CMAKE_TRY_COMPILE.xcodeproj build -target cmTryCompileExec -configuration Debug
+=== BUILD NATIVE TARGET cmTryCompileExec OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+Check dependencies
+
+CompileC CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/testCXXCompiler.o testCXXCompiler.cxx normal x86_64 c++ com.apple.compilers.llvmgcc42
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 "-DCMAKE_INTDIR=\"Debug\"" -isysroot /Developer/SDKs/MacOSX10.7.sdk -fasm-blocks -mmacosx-version-min=10.7 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/include -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources/x86_64 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -g -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/testCXXCompiler.o
+
+Ld Debug/cmTryCompileExec normal x86_64
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-g++-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.7.sdk -L/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -filelist /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/cmTryCompileExec.LinkFileList -mmacosx-version-min=10.7 -Wl,-search_paths_first -Wl,-headerpad_max_install_names -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec
+
+PhaseScriptExecution "CMake PostBuild Rules" CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-D8D6B2AFD892475F9A40115F.sh
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /bin/sh -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-D8D6B2AFD892475F9A40115F.sh
+echo "Depend check for xcode"
+Depend check for xcode
+cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp && make -C /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp -f /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMakeScripts/XCODE_DEPEND_HELPER.make PostBuild.cmTryCompileExec.Debug
+make[1]: Nothing to be done for `PostBuild.cmTryCompileExec.Debug'.
+
+
+** BUILD SUCCEEDED **
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/local/bin/cmakexbuild -project CMAKE_TRY_COMPILE.xcodeproj build -target cmTryCompileExec -configuration Debug
+=== BUILD NATIVE TARGET cmTryCompileExec OF PROJECT CMAKE_TRY_COMPILE WITH CONFIGURATION Debug ===
+Check dependencies
+
+CompileC CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/CMakeCXXCompilerABI.o ../../../../../../../../opt/local/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp normal x86_64 c++ com.apple.compilers.llvmgcc42
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 "-DCMAKE_INTDIR=\"Debug\"" -isysroot /Developer/SDKs/MacOSX10.7.sdk -fasm-blocks -mmacosx-version-min=10.7 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/include -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources/x86_64 -I/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/DerivedSources -Wmost -Wno-four-char-constants -Wno-unknown-pragmas -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -g -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/../../../../../../../../opt/local/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/CMakeCXXCompilerABI.o
+
+Ld Debug/cmTryCompileExec normal x86_64
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /Developer/usr/bin/llvm-g++-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.7.sdk -L/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -F/Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug -filelist /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Objects-normal/x86_64/cmTryCompileExec.LinkFileList -mmacosx-version-min=10.7 -v -Wl,-search_paths_first -Wl,-headerpad_max_install_names -o /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec
+
+PhaseScriptExecution "CMake PostBuild Rules" CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-83452FCF8E264530B40D1C14.sh
+    cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp
+    /bin/sh -c /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMAKE_TRY_COMPILE.build/Debug/cmTryCompileExec.build/Script-83452FCF8E264530B40D1C14.sh
+echo "Depend check for xcode"
+Depend check for xcode
+cd /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp && make -C /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp -f /Users/colin/code/Kinect-Projects/3dHistograms/build/CMakeFiles/CMakeTmp/CMakeScripts/XCODE_DEPEND_HELPER.make PostBuild.cmTryCompileExec.Debug
+make[1]: Nothing to be done for `PostBuild.cmTryCompileExec.Debug'.
+
+
+** BUILD SUCCEEDED **
+
+
+
