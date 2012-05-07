@@ -10,6 +10,12 @@ from SkelPlay import *
 
 import pdb
 
+import scipy.ndimage as nd
+import dijkstrasGraph
+
+# from SkelPlay import *
+# from backgroundSubtract import *
+
 
 class Features:
 	img = []
@@ -67,6 +73,8 @@ class Features:
 		com_out = [] #center of mass
 		com_xyz_out = []
 		bounds = []
+		self.xyz = []
+		self.indices = []
 		if len(self.personSlices) > 0:
 			for objIndex in xrange(len(self.personSlices)):
 				inds = np.nonzero(self.labelImg[self.personSlices[objIndex]] == self.labels[objIndex])
@@ -79,7 +87,9 @@ class Features:
 				# following is unnecessary unless axis has already been painted on the image
 				# inds2 = [x for x in inds2 if x[2] != 0]
 				xyz = np.array(depth2world(np.array(inds2)))
-				inds2 = np.transpose(inds2)
+				inds2 = np.transpose(inds2)				
+				self.xyz.append(xyz)
+				self.indices.append(inds2)
 
 				# Get bounding box
 				x = [np.min(xyz[:,0]), np.max(xyz[:,0])]
@@ -200,5 +210,78 @@ class Features:
 		plot(h[1][1::],h[0])
 		figure(3)
 		plot(d)
+
+
+def getExtrema(objects, labelInds, out, d, com, featureExt, ind):
+	extrema = []
+	mask = out[objects[ind]]==labelInds[ind]
+	mask_erode = nd.binary_erosion(out[objects[ind]]==labelInds[ind], iterations=5)
+	objTmp = np.array(d[objects[ind]])#, dtype=np.uint16)
+
+	obj2Size = np.shape(objTmp)
+	x = objects[ind][0].start # down
+	y = objects[ind][1].start # right
+	c = np.array([com[ind][0] - x, com[ind][1] - y])
+	current = [c[0], c[1]]
+	xyz = featureExt.xyz[ind]
+	
+# It crashes when the new person comes in
+
+	t = time.time()
+	trailSets = []
+	for i in xrange(15):
+		if len(xyz) > 0:
+			com_xyz = depth2world(np.array([[current[0]+x, current[1]+y, d[current[0]+x, current[1]+y]]]))[0]
+			# pdb.set_trace()
+			dists = np.sqrt(np.maximum(0, np.sum((xyz-com_xyz)**2, 1)))
+			inds = featureExt.indices[ind]
+			
+			distsMat = np.zeros([obj2Size[0],obj2Size[1]], dtype=uint16)		
+			distsMat = ((-mask)*499)
+			distsMat[inds[0,:]-x, inds[1,:]-y] = dists 		
+			objTmp = distsMat
+
+			dists2 = np.empty([obj2Size[0]-2,obj2Size[1]-2,4], dtype=int16)
+			dists2[:,:,0] = objTmp[1:-1, 1:-1] - objTmp[0:-2, 1:-1]#up
+			dists2[:,:,1] = objTmp[1:-1, 1:-1] - objTmp[2:, 1:-1]#down
+			dists2[:,:,2] = objTmp[1:-1, 1:-1] - objTmp[1:-1, 2:]#right
+			dists2[:,:,3] = objTmp[1:-1, 1:-1] - objTmp[1:-1, 0:-2]#left
+			dists2 = np.abs(dists2)
+
+
+			dists2Tot = np.zeros([obj2Size[0],obj2Size[1]], dtype=int16)+9999		
+			maxDists = np.max(dists2, 2)
+			distThresh = 30
+			outline = np.nonzero(maxDists>distThresh)
+			mask[outline[0]+1, outline[1]+1] = 0
+
+			dists2Tot[dists2Tot > 0] = 9999
+			dists2Tot[-mask] = 15000
+			dists2Tot[current[0], current[1]] = 0
+			for t in trailSets:
+				for i in t:
+					dists2Tot[i[0], i[1]] = 0			
+
+			visitMat = np.zeros_like(dists2Tot, dtype=uint8)
+			visitMat[-mask] = 255
+
+			trail = dijkstrasGraph.dijkstras(dists2Tot, visitMat, dists2, current)
+			trailSets.append(trail)
+
+			dists2Tot *= mask_erode
+
+			maxInd = np.argmax(dists2Tot*(dists2Tot<500))
+			maxInd = np.unravel_index(maxInd, dists2Tot.shape)
+
+			extrema.append([maxInd[0]+x, maxInd[1]+y])
+			current = [maxInd[0], maxInd[1]]
+	# print (time.time()-t)/15
+
+	# for i in extrema:
+	# 	dists2Tot[i[0]-3:i[0]+3, i[1]-3:i[1]+3] = 499
+	# imshow(dists2Tot*(dists2Tot < 500))
+	# pdb.set_trace()
+
+	return extrema
 
 

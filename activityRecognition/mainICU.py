@@ -12,6 +12,27 @@ from SkelPlay import *
 from backgroundSubtract import *
 from featureExtraction import *
 
+# import pyximport
+# pyximport.install()
+import dijkstras
+
+
+# Inter-person vector comparisons
+# Always have n by 5 vector
+def orientationComparison(vecs1, direc=2, size_=5):
+	# Find the projection of each person's vector towards each other
+	# pdb.set_trace()
+	vecCompare = np.zeros([len(vecs1), size_])
+	for i in xrange(len(vecs1)):
+		for j in xrange(min(len(vecs1), size_)):
+			if i == j:#j < i:
+				continue
+			else:
+				vecCompare[i,j] = np.abs(np.dot(vecs1[i][direc], vecs1[j][direc]))
+	vecCompare = -1.0*np.sort(-vecCompare, axis=1)
+	return vecCompare
+
+
 
 #------------------Init-----------------------
 #----Get mean images for bg subtraction-------
@@ -51,14 +72,14 @@ startTime = 6900#2000 #2x procedure: 6900, 7200
 # startTime = 1350#2000
 startTime2 = startTime+12
 serial = True
-if 1: #Serial
+if 0: #Serial
 	reader1 = ICUReader(path, framerate, startTime, cameraNumber=0, viz=0, vizSkel=0, skelsEnabled=0, serial=1)
 	reader2 = ICUReader(path2, framerate, startTime2, cameraNumber=1, viz=0, vizSkel=0, skelsEnabled=0, serial=1)
 else: #Real-time
 	reader1 = ICUReader(path, framerate, startTime, cameraNumber=0, viz=0, vizSkel=0, skelsEnabled=0, serial=0)
 	reader2 = ICUReader(path2, framerate, startTime2, cameraNumber=1, viz=0, vizSkel=0, skelsEnabled=0, serial=0)
 
-vizWin = 0
+vizWin = 1
 if vizWin:
 	cv.NamedWindow("a")
 	# cv.NamedWindow("a_seg")
@@ -72,7 +93,8 @@ if vizWin:
 dir_ = '/Users/colin/code/Kinect-Projects/activityRecognition/'
 tracker1 = Tracker('1', dir_)
 tracker2 = Tracker('2', dir_)
-featureExt1 = Features(['basis', 'viz']) #feature extractor
+featureExt1 = Features(['basis']) #feature extractor
+# featureExt1 = Features(['basis', 'viz']) #feature extractor
 # featureExt1.addTouchEvent([[-5, -5000, -5000], [5, 5000, 5000]])
 ###### problem between xyz/uvw??
 featureExt1.addTouchEvent([250, -200, 1000], 350)
@@ -82,8 +104,11 @@ featureExt2 = Features(['basis', 'viz']) #feature extractor
 
 # for i in xrange(1):
 # while(1):
+histVecs = []
 start = time.time()
-while (len(reader1.allPaths) > 0):
+# while (len(reader1.allPaths) > 0):
+while(1):
+# if 1:
 
 	if 1:
 		try:
@@ -99,16 +124,34 @@ while (len(reader1.allPaths) > 0):
 			out1, objects1, labelInds1 = extractPeople_2(diffDraw1)
 			if len(labelInds1) > 0:
 				d1, com1, vecs1, touched1 = featureExt1.run(d1, out1, objects1, labelInds1)
+				ornCompare = orientationComparison(vecs1)
 				com1_xyz = featureExt1.coms_xyz
 				t = reader1.timeMin*60 + reader1.timeSec
-				ids = tracker1.run(com1_xyz, objects1, t, reader1.depthFilename, touched1)
+				ids = tracker1.run(com1_xyz, objects1, t, reader1.depthFilename, touched1, vecs1, ornCompare)
+
+				# for i in xrange(len(ids)):
+				# 	# pdb.set_trace()
+				# 	v = ids[i]
+				# 	if len(histVecs) <= v:
+				# 		histVecs.append([])
+				# 	histVecs[v].append(vecs1[i])
+
 				# print "People: ", ids
+			extremaInds = []
+			for i in xrange(len(labelInds1)):
+				try:
+					extrema = getExtrema(objects1, labelInds1, out1, d1, com1, featureExt1, i)
+					extremaInds.append(extrema)
+				except:
+					print "Error getting extrema"
+
 			tEnd = time.time()
 			# print "Time 1: ", tEnd - tStart
-			
+
 			if vizWin:
 				out1b = np.zeros_like(out1, dtype=np.uint8)+255
 				out1b = np.dstack([out1b, out1b, out1b])
+				d1c = constrain(d1, 500, 4000)
 				d1c = np.dstack([d1c, d1c, d1c])
 				# Draw binary sensors
 				for i in featureExt1.touchAreas:
@@ -119,11 +162,11 @@ while (len(reader1.allPaths) > 0):
 
 				for i in xrange(len(labelInds1)):
 					# out1[out1==labelInds1[i]] = (ids[i]+1)*50
-					if 0:
+					if 1:
 						d1c[out1==labelInds1[i], ids[i]%3] = (ids[i]+1)*50
 						d1c[out1==labelInds1[i], (ids[i]+1)%3] = 0
 						d1c[out1==labelInds1[i], (ids[i]+2)%3] = 0
-					else:
+					if 0:
 						# print "t", touched1
 						d1c[out1==labelInds1[i], 1] = 75 * (ids[i]%3 == 0)
 						d1c[out1==labelInds1[i], 2] = 75 * (ids[i]%3 == 1)
@@ -141,6 +184,11 @@ while (len(reader1.allPaths) > 0):
 								center = world2depth(np.array([center]))
 								r = int(featureExt1.touchAreas[j][1]*.1)
 								cv2.circle(d1c, (center[1][0],center[0][0]), r, [0,150, 150], thickness=4)
+
+
+				for exSet in extremaInds:
+					for ex in exSet:
+						d1c[ex[0]-2:ex[0]+2, ex[1]-2:ex[1]+2] = 255
 
 				cv2.imshow("a", d1c)
 				out1 *= 10 * (out1>0)
@@ -266,51 +314,155 @@ print end - start
 # grad = nd.generic_filter(im, func, size=(2,2)) # x-axis
 
 #-----------Keypoints------------------------
+cd '/Users/colin/code/Kinect-Projects/activityRecognition/'
+np.savez('tmpPerson.npz', {'objects':objects1, 'labels':labelInds1, 'out':out1, 'd':d1, 'com':com1, 'features':featureExt1})
+
 
 if 0:
-	ind = 0
-	mask = out2[objects2[ind]]==labelInds2[ind]
-	mask_erode = nd.binary_erosion(out2[objects2[ind]]==labelInds2[ind])
+	import os, time, sys
+	import numpy as np
+	import cv, cv2
+	import scipy.ndimage as nd
+	import pdb
+	from math import floor
+	sys.path.append('/Users/colin/code/Kinect-Projects/activityRecognition/')
+	from icuReader import ICUReader
+	from peopleTracker import Tracker
+	from SkelPlay import *
+	from backgroundSubtract import *
+	from featureExtraction import *
+
+	# import pyximport
+	# pyximport.install()
+	import dijkstrasGraph
+
+	saved = np.load('tmpPerson.npz')['arr_0'].tolist()
+	objects1 = saved['objects']; labelInds1=saved['labels']; out1=saved['out']; d1=saved['d']; com1=saved['com'];featureExt1=saved['features']
+
+	objects = objects1
+	labelInds = labelInds1
+	out = out1
+	d=d1
+	com = com1
+	extrema = []
+	ind = 1
+	mask = out[objects[ind]]==labelInds[ind]
+	mask_erode = nd.binary_erosion(out[objects[ind]]==labelInds[ind], iterations=5)
 	# imshow(out2[objects2[ind]]==labelInds2[ind])
-	objTmp = np.array(d2[objects2[ind]])#, dtype=np.uint16)
-	objTmp *= mask
-	# objTmpLow = np.empty([objTmp.shape[0]/2, objTmp.shape[1]/2], dtype=uint16)
+	objTmp = np.array(d[objects[ind]])#, dtype=np.uint16)
+	# objTmp *= mask
+
 	# cv.PyrDown(cv.fromarray(objTmp), cv.fromarray(objTmpLow))
 	# objTmp = objTmpLow
-	# dists2 = np.zeros_like(d2[objects2[0]])
+
 	obj2Size = np.shape(objTmp)
-	x = objects2[ind][0].start # down
-	y = objects2[ind][1].start # right
-	c = np.array([com2[ind][0] - x, com2[ind][1] - y])
+	x = objects[ind][0].start # down
+	y = objects[ind][1].start # right
+	c = np.array([com[ind][0] - x, com[ind][1] - y])
+	current = [c[0], c[1]]
+	xyz = featureExt1.xyz[ind]
 
-	# Floyd-Warshall Algorithm
-	# d = 3; dH = 2; dI = 1
-	d = 1; dH = 1
-	dists2 = np.empty([obj2Size[0]-(d+1),obj2Size[1]-(d+1),4], dtype=int16)
-	dists2Tot = np.zeros([obj2Size[0],obj2Size[1]], dtype=int16)+9999
-	# dists2Tot = objTmp*mask + (mask==0)*9999
-	# dists2Tot = 9999
+	for i in xrange(5):
+	# if 1:
+		com_xyz = depth2world(np.array([[current[0]+x, current[1]+y, d1[current[0]+x, current[1]+y]]]))[0]
+		dists = np.sqrt(np.sum((xyz-com_xyz)**2, 1))
+		inds = featureExt1.indices[ind]
+		
+		distsMat = np.zeros([obj2Size[0],obj2Size[1]], dtype=uint16)		
+		distsMat = ((-mask)*499)
+		distsMat[inds[0,:]-x, inds[1,:]-y] = dists 		
+		objTmp = distsMat
 
-	# dists2Tot[mask] = 999
-	# objTmp[c[0]-1, c[1]-1] = 0
-	# dists2[:,:,0] = objTmp[1:obj2Size[0]-1, 1:obj2Size[1]-1] - objTmp[0:obj2Size[0]-2, 1:obj2Size[1]-1]#up
-	# dists2[:,:,1] = objTmp[1:obj2Size[0]-1, 1:obj2Size[1]-1] - objTmp[2:obj2Size[0], 1:obj2Size[1]-1]#down
-	# dists2[:,:,2] = objTmp[1:obj2Size[0]-1, 1:obj2Size[1]-1] - objTmp[1:obj2Size[0]-1, 2:obj2Size[1]]#right
-	# dists2[:,:,3] = objTmp[1:obj2Size[0]-1, 1:obj2Size[1]-1] - objTmp[1:obj2Size[0]-1, 0:obj2Size[1]-2]#left
+		dists2 = np.empty([obj2Size[0]-2,obj2Size[1]-2,4], dtype=int16)
+		dists2[:,:,0] = objTmp[1:-1, 1:-1] - objTmp[0:-2, 1:-1]#up
+		dists2[:,:,1] = objTmp[1:-1, 1:-1] - objTmp[2:, 1:-1]#down
+		dists2[:,:,2] = objTmp[1:-1, 1:-1] - objTmp[1:-1, 2:]#right
+		dists2[:,:,3] = objTmp[1:-1, 1:-1] - objTmp[1:-1, 0:-2]#left
+		dists2 = np.abs(dists2)
 
-	dists2[:,:,0] = objTmp[dH:-dH, dH:-dH] - objTmp[0:-(d+1), dH:-dH]#up
-	dists2[:,:,1] = objTmp[dH:-dH, dH:-dH] - objTmp[(d+1):, dH:-dH]#down
-	dists2[:,:,2] = objTmp[dH:-dH, dH:-dH] - objTmp[dH:-dH, (d+1):]#right
-	dists2[:,:,3] = objTmp[dH:-dH, dH:-dH] - objTmp[dH:-dH, 0:-(d+1)]#left
 
-	# dists2[c[0]-1, c[1]-1] = 0
-	dists2 = np.abs(dists2)
-	dists2Min = np.min(np.abs(dists2), 2)*mask_erode[dH:-dH, dH:-dH]
-	dists2Max = np.max(np.abs(dists2), 2)*mask_erode[dH:-dH, dH:-dH]
-	# dists2Tot[c[0]-1:c[0]+1, c[1]-1:c[1]+1] = dists2Min[c[0]-1:c[0]+1, c[1]-1:c[1]+1]
-	dists2Tot = objTmp
-	dists2Tot[c[0]-2:c[0]+1, c[1]-2:c[1]+1] = objTmp[c[0]-2:c[0]+1, c[1]-2:c[1]+1]
-	dists2Tot[c[0], c[1]] = 0
+		dists2Tot = np.zeros([obj2Size[0],obj2Size[1]], dtype=int16)+9999		
+		maxDists = np.max(dists2, 2)
+		distThresh = 30
+		outline = np.nonzero(maxDists>distThresh)
+		mask[outline[0]+1, outline[1]+1] = 0
+
+		dists2Tot[dists2Tot > 0] = 9999
+		dists2Tot[-mask] = 15000
+		dists2Tot[current[0], current[1]] = 0
+
+		visitMat = np.zeros_like(dists2Tot, dtype=uint8)
+		visitMat[-mask] = 255
+
+		t = time.time()
+		dists2Tot = dijkstrasGraph.dijkstras(dists2Tot, visitMat, dists2, current)
+		print time.time()-t
+
+		dists2Tot *= mask_erode
+			# print current
+		# imshow(dists2Tot*(dists2Tot < 800))
+		maxInd = np.argmax(dists2Tot*(dists2Tot<500))
+		maxInd = np.unravel_index(maxInd, dists2Tot.shape)
+
+		extrema.append([maxInd[0], maxInd[1]])
+		current = [maxInd[0], maxInd[1]]
+
+	for i in extrema:
+		dists2Tot[i[0]-3:i[0]+3, i[1]-3:i[1]+3] = 799
+	imshow(dists2Tot*(dists2Tot < 800))
+
+
+
+
+	
+	distsDone = copy.deepcopy(dists2Tot)
+	distsDone = distsDone + (-mask)*9999
+	current = [c[0], c[1]]
+	test = [140, 60]
+	current = test
+	path = []
+	path.append([current[0], current[1]])
+
+
+	done = 1000
+	while(done > 0):		
+		done -= 1
+
+		# if np.min(distsDone[current[0]-1:current[0]+2, current[1]-1:current[1]+2]+np.array([[1,0,1],[0,1,0],[1,0,1]])*9999) >= distsDone[current[0], current[1]]:
+		if 1:
+			distsDone[current[0], current[1]] = -999
+			direc = np.argmax(distsDone[current[0]-1:current[0]+2, current[1]-1:current[1]+2]+np.array([[1,0,1],[0,1,0],[1,0,1]])*(-9999))
+
+			print direc
+			if direc == 1:
+				current[0] -= 1
+			elif direc == 7:
+				current[0] += 1
+			elif direc == 5:
+				current[1] += 1
+			elif direc == 3:
+				current[1] -= 1	
+
+			if current == path[-1]:
+				break
+			print current, direc
+
+			path.append([current[0], current[1]])
+
+		else:
+			break
+		
+
+	imshow(distsDone*(distsDone < 1000))
+	imshow(dists2Tot*(dists2Tot < 1000))
+	distsDone = copy.deepcopy(dists2Tot)
+	distsDone = distsDone + (-mask)*9999
+	current = [c[0], c[1]]
+	path = []
+	path.append(current)
+	conn = np.argmin(dists2, 2)
+
+
 
 
 
@@ -331,16 +483,16 @@ if 0:
 		# 					dists2[:,:,1]+dists2Tot[2:,   1:-1]+1, #down
 		# 					dists2[:,:,2]+dists2Tot[1:-1, 2:]+1, #right
 		# 					dists2[:,:,3]+dists2Tot[1:-1, 0:-2]+1], axis=0) #left
-		# dists2Tot[dH:-dH, dH:-dH] = np.min([dists2Tot[dH:-dH, dH:-dH],
-		# 					dists2[:,:,0]+dists2Tot[0:-d-1, dH:-dH]+1, #up
-		# 					dists2[:,:,1]+dists2Tot[d+1:,   dH:-dH]+1, #down
-		# 					dists2[:,:,2]+dists2Tot[dH:-dH, d+1:]+1, #right
-		# 					dists2[:,:,3]+dists2Tot[dH:-dH, 0:-d-1]+1], axis=0) #left
-		dists2Tot[dH:-dH, dH:-dH] = np.min([dists2Tot[dH:-dH, dH:-dH],
-							dists2[:,:,0]+dists2Tot[0:-d-1, dH:-dH]-1, #up
-							dists2[:,:,1]+dists2Tot[d+1:,   dH:-dH]-1, #down
-							dists2[:,:,2]+dists2Tot[dH:-dH, d+1:]-1, #right
-							dists2[:,:,3]+dists2Tot[dH:-dH, 0:-d-1]-1], axis=0) #left	
+		# dists2Tot[1:-1, 1:-1] = np.min([dists2Tot[1:-1, 1:-1],
+		# 					dists2[:,:,0]+dists2Tot[0:-d-1, 1:-1]+1, #up
+		# 					dists2[:,:,1]+dists2Tot[d+1:,   1:-1]+1, #down
+		# 					dists2[:,:,2]+dists2Tot[1:-1, d+1:]+1, #right
+		# 					dists2[:,:,3]+dists2Tot[1:-1, 0:-d-1]+1], axis=0) #left
+		dists2Tot[1:-1, 1:-1] = np.min([dists2Tot[1:-1, 1:-1],
+							dists2[:,:,0]+dists2Tot[0:-d-1, 1:-1]-1, #up
+							dists2[:,:,1]+dists2Tot[d+1:,   1:-1]-1, #down
+							dists2[:,:,2]+dists2Tot[1:-1, d+1:]-1, #right
+							dists2[:,:,3]+dists2Tot[1:-1, 0:-d-1]-1], axis=0) #left	
 		dists2Tot[c[0]-2:c[0]+1, c[1]-2:c[1]+1] = d2[c[0]-2:c[0]+1, c[1]-2:c[1]+1]
 		# Extra +1 is needed to try to keep pixels stationary
 	imshow(dists2Tot*(dists2Tot < 500)*mask)
