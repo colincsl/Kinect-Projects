@@ -104,7 +104,7 @@ def extractPeople(img):
 
 
 def extractPeople_2(im):
-	minPersonPixThresh = 5000
+	minPersonPixThresh = 3000
 	im_ = im[1:480, 1:640]
 	im = np.array(im, dtype=np.int16)
 	grad_x = im[1:480, 1:640] - im[1:480, 0:639]

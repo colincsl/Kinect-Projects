@@ -91,8 +91,8 @@ int frameInit;
 int diffThresh;
 time_t timePrev, timeNow;
 
-#define dir "/Users/colin/data/ICUtest/"
-		    // string dir = "/Users/colin/data/ICUtest/";
+//#define dir "/Users/colin/data/ICUtest/"
+#define dir "/Volumes/ICU/ICUdata/"
 		//    string dir = "/Volumes/ICU/testData/";
 
 //---------------------------------------------------------------------------
